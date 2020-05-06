@@ -2,12 +2,18 @@ package users;
 
 public enum UserKind {
 
-    SELFCENTERED(),
-    NAIVE(),
-    LIAR(),
-    FANATIC();
+    SELFCENTERED("self-centered"),
+    NAIVE("naive"),
+    LIAR("liar"),
+    FANATIC("fanatic");
 
-    UserKind() {
-        
+    private String userKind;
+
+    UserKind(String userKind) {
+        this.userKind = userKind;
+    }
+
+    public String getString() {
+        return userKind;
     }
 }
