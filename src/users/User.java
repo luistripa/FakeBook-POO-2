@@ -1,5 +1,10 @@
 package users;
 
+import exceptions.UserHasNoFriendsException;
+import exceptions.UsersAreAlreadyFriendsException;
+
+import java.util.Iterator;
+
 public interface User {
 
     String getID();
@@ -11,5 +16,9 @@ public interface User {
     int getPostsCount();
 
     int getCommentsCount();
+
+    void addFriend(User user) throws UsersAreAlreadyFriendsException;
+
+    Iterator<User> friendIterator() throws UserHasNoFriendsException;
 
 }

@@ -28,6 +28,7 @@ public class Main {
 	public static final String EXIT 			= "EXIT";
 
 	// Success output messages
+	public static final String FRIEND_ADDED = "%s is friend of %s\n";
 	public static final String EXIT_MESSAGE = "Bye!";
 
 	// Error output messages
@@ -149,7 +150,11 @@ public class Main {
 	}
 
 	private static void tryToProcessAddFriend(Scanner in, FakeBook fb) throws UserDoesNotExistException, UsersAreAlreadyFriendsException {
-		// TODO
+		String u1_ID = in.nextLine().trim();
+		String u2_ID = in.nextLine().trim();
+
+		fb.addFriend(u1_ID, u2_ID);
+		System.out.printf(FRIEND_ADDED, u1_ID, u2_ID);
 	}
 
 
@@ -162,7 +167,18 @@ public class Main {
 	}
 
 	private static void tryToProcessFriends(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoFriendsException {
-		// TODO
+		String userID = in.nextLine().trim();
+
+		Iterator<User> iter = fb.userFriendIterator(userID);
+		while (iter.hasNext()) {
+			User user = iter.next();
+			System.out.printf(user.getID());
+			if (iter.hasNext())
+				System.out.printf(", ");
+			else
+				System.out.printf(".");
+		}
+		System.out.println();
 	}
 
 

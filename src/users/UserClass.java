@@ -1,27 +1,29 @@
 package users;
 
 import comments.Comment;
+import exceptions.UserHasNoFriendsException;
+import exceptions.UsersAreAlreadyFriendsException;
 import posts.Post;
+import users.comparators.ComparatorAlphabetical;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class UserClass implements User {
 
     private String ID;
     private UserKind userKind;
-    private List<User> friends;
-    private List<Post> postsMade;
-    private List<Post> postsReceived;
-    private List<Comment> commentsOnPosts;
+    private Map<String, User> friends;
+    private Map<Integer, Post> postsMade;
+    private Map<Integer, Post> postsReceived;
+    private Map<String, Comment> commentsOnPosts;
 
     public UserClass(String ID, UserKind userKind) {
         this.ID = ID;
         this.userKind = userKind;
-        friends = new LinkedList<User>();
-        postsMade = new LinkedList<Post>();
-        postsReceived = new LinkedList<Post>();
-        commentsOnPosts = new LinkedList<Comment>();
+        friends = new HashMap<String, User>();
+        postsMade = new HashMap<Integer, Post>();
+        postsReceived = new HashMap<Integer, Post>();
+        commentsOnPosts = new HashMap<String, Comment>();
     }
 
 
@@ -43,5 +45,19 @@ public class UserClass implements User {
 
     public int getCommentsCount() {
         return commentsOnPosts.size();
+    }
+
+    public void addFriend(User user) throws UsersAreAlreadyFriendsException {
+        if (friends.containsKey(user.getID()))
+            throw new UsersAreAlreadyFriendsException(this.getID(), user.getID());
+        friends.put(user.getID(), user);
+    }
+
+    public Iterator<User> friendIterator() throws UserHasNoFriendsException {
+        if (getFriendCount() == 0)
+            throw new UserHasNoFriendsException(this.getID());
+        List<User> list = new LinkedList<>(friends.values());
+        list.sort(new ComparatorAlphabetical());
+        return list.iterator();
     }
 }
