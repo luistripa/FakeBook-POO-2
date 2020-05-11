@@ -1,6 +1,7 @@
-*.sublime-project
-*.sublime-workspace
+.classpath
+.project
+.idea
+FakeBook.iml
 bin/
-*/.DS_Store
-.DS_Store
 out/
+.DS_Store
