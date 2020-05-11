@@ -3,6 +3,7 @@ package fakebook;
 import users.UserKind;
 import exceptions.*;
 import hashtags.HashTag;
+import posts.Post;
 import users.*;
 
 import java.util.Iterator;
@@ -19,4 +20,7 @@ public interface FakeBook {
     void addFriend(String u1_ID, String u2_ID) throws UserDoesNotExistException, UsersAreAlreadyFriendsException;
 
     Iterator<User> userFriendIterator(String userID) throws UserDoesNotExistException, UserHasNoFriendsException;
+    
+    Iterator<Post> userPostIterator(String userID) throws UserDoesNotExistException, UserHasNoPostsException;
+    
 }

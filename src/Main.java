@@ -5,6 +5,7 @@ import users.UserKind;
 import exceptions.*;
 import fakebook.*;
 import helpmenu.HelpMenu;
+import posts.Post;
 import users.*;
 
 public class Main {
@@ -223,7 +224,14 @@ public class Main {
 	}
 
 	private static void tryToProcessUserPosts(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoPostsException {
-		// TODO
+		String userID = in.nextLine().trim();
+		
+		Iterator<Post> iter = fb.userPostIterator(userID);
+		System.out.println(userID + " posts:");
+		while (iter.hasNext()) {
+			Post post = iter.next();
+			System.out.printf("%d. [%d] %d [%d comments]", post.getPostID(), post.getKind().getString(), post.getPostText(), post.getCommentCount());
+		}
 	}
 
 

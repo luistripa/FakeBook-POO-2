@@ -2,6 +2,7 @@ package fakebook;
 
 
 import exceptions.*;
+import posts.Post;
 import users.*;
 
 import java.util.*;
@@ -62,5 +63,12 @@ public class FakeBookClass implements FakeBook {
         if (user == null)
             throw new UserDoesNotExistException(userID);
         return user.friendIterator();
+    }
+    
+    public Iterator<Post> userPostIterator(String userID) throws UserDoesNotExistException, UserHasNoPostsException {  
+    	User user = users.get(userID);
+    	if (user == null)
+    		 throw new UserDoesNotExistException(userID);
+    	return user.postsIterator();
     }
 }

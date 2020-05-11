@@ -35,6 +35,10 @@ public class PostClass implements Post {
     public PostKind getKind() {
         return kind;
     }
+    
+    public int getCommentCount() {
+    	return commentThread.size();
+    }
 
     public Map<String, HashTag> getHashtags() {
         return hashtags;
@@ -51,4 +55,5 @@ public class PostClass implements Post {
     public int compareTo(Post other) {
         return 0;
     }
+    
 }

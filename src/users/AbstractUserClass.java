@@ -2,6 +2,7 @@ package users;
 
 import comments.Comment;
 import exceptions.UserHasNoFriendsException;
+import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
 import posts.Post;
 
@@ -55,7 +56,16 @@ public abstract class AbstractUserClass implements User {
     public Iterator<User> friendIterator() throws UserHasNoFriendsException {
         if (getFriendCount() == 0)
             throw new UserHasNoFriendsException(this.getID());
-        List<User> list = new LinkedList<>(friends.values());
+        List<User> list = new ArrayList<>(friends.values());
         return list.iterator();
     }
+    
+    public Iterator<Post> postsIterator() throws UserHasNoPostsException{
+    	if (getPostsCount() == 0) {
+    		throw new UserHasNoPostsException(this.getID());
+    	}
+    	List<Post> list = new ArrayList<>(postsMade.values());
+    	return list.iterator();
+    }
+    
 }
