@@ -1,4 +1,4 @@
-package users.comparators;
+package comparators;
 
 import users.User;
 

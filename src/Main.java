@@ -1,6 +1,7 @@
 import java.util.Iterator;
 import java.util.Scanner;
 
+import users.UserKind;
 import exceptions.*;
 import fakebook.*;
 import helpmenu.HelpMenu;
@@ -28,8 +29,9 @@ public class Main {
 	public static final String EXIT 			= "EXIT";
 
 	// Success output messages
-	public static final String FRIEND_ADDED = "%s is friend of %s\n";
-	public static final String EXIT_MESSAGE = "Bye!";
+	public static final String USER_REGISTER	= "%s registered.\n";
+	public static final String FRIEND_ADDED 	= "%s is friend of %s\n";
+	public static final String EXIT_MESSAGE 	= "Bye!";
 
 	// Error output messages
 	public static final String UNKNOWN_COMMAND = "Unknown command";
@@ -53,60 +55,24 @@ public class Main {
 
 	private static void processCommand(String command, Scanner in, FakeBook fb) {
 		switch (command) {
-			case REGISTER:
-				processRegister(in, fb);
-				break;
-			case USERS:
-				processUsers(fb);
-				break;
-			case ADDFRIEND:
-				processAddFriend(in, fb);
-				break;
-			case FRIENDS:
-				processFriends(in, fb);
-				break;
-			case POST:
-				processPost(in, fb);
-				break;
-			case USERPOSTS:
-				processUserPosts(in, fb);
-				break;
-			case COMMENT:
-				processComment(in, fb);
-				break;
-			case READPOST:
-				processReadPost(in, fb);
-				break;
-			case COMMENTSBYUSER:
-				processCommentsByUser(in, fb);
-				break;
-			case TOPICFANATICS:
-				processTopicFanatics(in, fb);
-				break;
-			case TOPICPOSTS:
-				processTopicPosts(in, fb);
-				break;
-			case POPULARPOST:
-				processPopularPost(in, fb);
-				break;
-			case TOPPOSTER:
-				processTopPoster(in, fb);
-				break;
-			case RESPONSIVE:
-				processResponsive(in, fb);
-				break;
-			case SHAMELESS:
-				processShameless(in, fb);
-				break;
-			case HELP:
-				processHelp();
-				break;
-			case EXIT:
-				System.out.println(EXIT_MESSAGE);
-				break;
-			default:
-				System.out.println(UNKNOWN_COMMAND);
-				break;
+			case REGISTER -> processRegister(in, fb);
+			case USERS -> processUsers(fb);
+			case ADDFRIEND -> processAddFriend(in, fb);
+			case FRIENDS -> processFriends(in, fb);
+			case POST -> processPost(in, fb);
+			case USERPOSTS -> processUserPosts(in, fb);
+			case COMMENT -> processComment(in, fb);
+			case READPOST -> processReadPost(in, fb);
+			case COMMENTSBYUSER -> processCommentsByUser(in, fb);
+			case TOPICFANATICS -> processTopicFanatics(in, fb);
+			case TOPICPOSTS -> processTopicPosts(in, fb);
+			case POPULARPOST -> processPopularPost(in, fb);
+			case TOPPOSTER -> processTopPoster(in, fb);
+			case RESPONSIVE -> processResponsive(in, fb);
+			case SHAMELESS -> processShameless(in, fb);
+			case HELP -> processHelp();
+			case EXIT -> System.out.println(EXIT_MESSAGE);
+			default -> System.out.println(UNKNOWN_COMMAND);
 		}
 	}
 
@@ -114,13 +80,30 @@ public class Main {
 	private static void processRegister(Scanner in, FakeBook fb) {
 		try {
 			tryToProcessRegister(in, fb);
-		} catch (UserAlreadyExistsException e) {
+		} catch (UserAlreadyExistsException | InvalidUserKindException e) {
 			System.out.println(e.getMessage());
+		} catch (InvalidFanaticismListException e) {
+			System.out.println(e.getMessage());
+			in.nextLine();
 		}
 	}
 
-	private static void tryToProcessRegister(Scanner in, FakeBook fb) throws UserAlreadyExistsException {
-		// TODO
+	private static void tryToProcessRegister(Scanner in, FakeBook fb) throws UserAlreadyExistsException, InvalidUserKindException, InvalidFanaticismListException {
+		String userKind = in.next();
+		String userID = in.nextLine().trim();
+		UserKind kind = getUserKind(userKind);
+
+		fb.addUser(userID, kind);
+		if (kind == UserKind.FANATIC) {
+			int fanaticismCount = in.nextInt();
+			for (int i = 0; i < fanaticismCount; i++) {
+				String stance = in.next();
+				String topic = in.next();
+				fb.createNewFanaticism(userID, stance, topic);
+			}
+			in.nextLine();
+		}
+		System.out.printf(USER_REGISTER, userID);
 	}
 
 
@@ -172,11 +155,11 @@ public class Main {
 		Iterator<User> iter = fb.userFriendIterator(userID);
 		while (iter.hasNext()) {
 			User user = iter.next();
-			System.out.printf(user.getID());
+			System.out.print(user.getID());
 			if (iter.hasNext())
-				System.out.printf(", ");
+				System.out.print(", ");
 			else
-				System.out.printf(".");
+				System.out.print(".");
 		}
 		System.out.println();
 	}
@@ -198,9 +181,7 @@ public class Main {
 	private static void processUserPosts(Scanner in, FakeBook fb) {
 		try {
 			tryToProcessUserPosts(in, fb);
-		} catch (UserDoesNotExistException e) {
-			System.out.println(e.getMessage());
-		} catch (UserHasNoPostsException e) {
+		} catch (UserDoesNotExistException | UserHasNoPostsException e) {
 			System.out.println(e.getMessage());
 		}
 	}
@@ -337,11 +318,11 @@ public class Main {
 		return in.next().toUpperCase();
 	}
 
-	private static UserKind getUserKind(String userKind) {
+	private static UserKind getUserKind(String userKind) throws InvalidUserKindException {
 		for (UserKind uk: UserKind.values()) {
 			if (uk.getString().equals(userKind))
 				return uk;
 		}
-		throw new NoSuchUserKindException();
+		throw new InvalidUserKindException(userKind);
 	}
 }

@@ -1,15 +1,18 @@
 package fakebook;
 
-import exceptions.NoUsersException;
-import exceptions.UserDoesNotExistException;
-import exceptions.UserHasNoFriendsException;
-import exceptions.UsersAreAlreadyFriendsException;
-import users.User;
+import users.UserKind;
+import exceptions.*;
+import hashtags.HashTag;
+import users.*;
 
 import java.util.Iterator;
+import java.util.List;
 
 public interface FakeBook {
 
+    void addUser(String userID, UserKind userKind) throws UserAlreadyExistsException;
+
+    void createNewFanaticism(String userID, String stance, String topic) throws InvalidFanaticismListException;
 
     Iterator<User> userIterator() throws NoUsersException;
 
