@@ -2,10 +2,16 @@ package posts;
 
 public enum PostKind {
 
-    HONEST(),
-    FAKE();
+    HONEST("honest"),
+    FAKE("fake");
 
-    PostKind() {
+    private final String postType;
 
+    PostKind(String message) {
+        this.postType = message;
+    }
+
+    public String getString() {
+        return postType;
     }
 }

@@ -24,6 +24,30 @@ public class PostClass implements Post {
         this.postText = postText;
     }
 
+    public int getPostID() {
+        return postID;
+    }
+
+    public User getAuthor() {
+        return author;
+    }
+
+    public PostKind getKind() {
+        return kind;
+    }
+
+    public Map<String, HashTag> getHashtags() {
+        return hashtags;
+    }
+
+    public SortedMap<String, Comment> getCommentThread() {
+        return commentThread;
+    }
+
+    public String getPostText() {
+        return postText;
+    }
+
     public int compareTo(Post other) {
         return 0;
     }

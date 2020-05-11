@@ -4,7 +4,6 @@ import comments.Comment;
 import exceptions.UserHasNoFriendsException;
 import exceptions.UsersAreAlreadyFriendsException;
 import posts.Post;
-import comparators.ComparatorAlphabetical;
 
 import java.util.*;
 
@@ -20,7 +19,7 @@ public abstract class AbstractUserClass implements User {
     public AbstractUserClass(String ID, UserKind userKind) {
         this.ID = ID;
         this.userKind = userKind;
-        friends = new HashMap<>();
+        friends = new TreeMap<>();
         postsMade = new HashMap<>();
         postsReceived = new HashMap<>();
         commentsOnPosts = new HashMap<>();
@@ -57,7 +56,6 @@ public abstract class AbstractUserClass implements User {
         if (getFriendCount() == 0)
             throw new UserHasNoFriendsException(this.getID());
         List<User> list = new LinkedList<>(friends.values());
-        list.sort(new ComparatorAlphabetical());
         return list.iterator();
     }
 }

@@ -3,7 +3,6 @@ package fakebook;
 
 import exceptions.*;
 import users.*;
-import comparators.ComparatorAlphabetical;
 
 import java.util.*;
 
@@ -12,7 +11,7 @@ public class FakeBookClass implements FakeBook {
     private Map<String, User> users;
 
     public FakeBookClass() {
-        users = new HashMap<>();
+        users = new TreeMap<>();
     }
 
 
@@ -38,8 +37,7 @@ public class FakeBookClass implements FakeBook {
     }
 
     public Iterator<User> userIterator() throws NoUsersException {
-        List<User> list = new LinkedList<>(users.values());
-        list.sort(new ComparatorAlphabetical());
+        List<User> list = new ArrayList<>(users.values());
         Iterator<User> iter = list.iterator();
 
         if (iter.hasNext())

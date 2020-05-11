@@ -7,7 +7,7 @@ public enum UserKind {
     LIAR("liar"),
     FANATIC("fanatic");
 
-    private String userKind;
+    private final String userKind;
 
     UserKind(String userKind) {
         this.userKind = userKind;

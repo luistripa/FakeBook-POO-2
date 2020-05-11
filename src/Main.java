@@ -55,24 +55,60 @@ public class Main {
 
 	private static void processCommand(String command, Scanner in, FakeBook fb) {
 		switch (command) {
-			case REGISTER -> processRegister(in, fb);
-			case USERS -> processUsers(fb);
-			case ADDFRIEND -> processAddFriend(in, fb);
-			case FRIENDS -> processFriends(in, fb);
-			case POST -> processPost(in, fb);
-			case USERPOSTS -> processUserPosts(in, fb);
-			case COMMENT -> processComment(in, fb);
-			case READPOST -> processReadPost(in, fb);
-			case COMMENTSBYUSER -> processCommentsByUser(in, fb);
-			case TOPICFANATICS -> processTopicFanatics(in, fb);
-			case TOPICPOSTS -> processTopicPosts(in, fb);
-			case POPULARPOST -> processPopularPost(in, fb);
-			case TOPPOSTER -> processTopPoster(in, fb);
-			case RESPONSIVE -> processResponsive(in, fb);
-			case SHAMELESS -> processShameless(in, fb);
-			case HELP -> processHelp();
-			case EXIT -> System.out.println(EXIT_MESSAGE);
-			default -> System.out.println(UNKNOWN_COMMAND);
+			case REGISTER:
+				processRegister(in, fb);
+				break;
+			case USERS:
+				processUsers(fb);
+				break;
+			case ADDFRIEND:
+				processAddFriend(in, fb);
+				break;
+			case FRIENDS:
+				processFriends(in, fb);
+				break;
+			case POST:
+				processPost(in, fb);
+				break;
+			case USERPOSTS:
+				processUserPosts(in, fb);
+				break;
+			case COMMENT:
+				processComment(in, fb);
+				break;
+			case READPOST:
+				processReadPost(in, fb);
+				break;
+			case COMMENTSBYUSER:
+				processCommentsByUser(in, fb);
+				break;
+			case TOPICFANATICS:
+				processTopicFanatics(in, fb);
+				break;
+			case TOPICPOSTS:
+				processTopicPosts(in, fb);
+				break;
+			case POPULARPOST:
+				processPopularPost(in, fb);
+				break;
+			case TOPPOSTER:
+				processTopPoster(in, fb);
+				break;
+			case RESPONSIVE:
+				processResponsive(in, fb);
+				break;
+			case SHAMELESS:
+				processShameless(in, fb);
+				break;
+			case HELP:
+				processHelp();
+				break;
+			case EXIT:
+				System.out.println(EXIT_MESSAGE);
+				break;
+			default:
+				System.out.println(UNKNOWN_COMMAND);
+				break;
 		}
 	}
 
