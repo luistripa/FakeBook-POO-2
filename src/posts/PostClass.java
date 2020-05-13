@@ -43,12 +43,24 @@ public class PostClass implements Post {
         return hashtags;
     }
 
-    public SortedMap<String, Comment> getCommentThread() {
-        return commentThread;
+    public Iterator<Comment> commentThread() {
+        return commentThread.values().iterator();
     }
 
     public String getPostText() {
         return postText;
+    }
+
+    public boolean equals(Object obj) {
+        if (this == obj)
+            return true;
+        if (obj == null)
+            return false;
+        if (getClass() != obj.getClass())
+            return false;
+        Post other = (PostClass) obj;
+        return postID == other.getPostID();
+
     }
 
     public int compareTo(Post other) {
