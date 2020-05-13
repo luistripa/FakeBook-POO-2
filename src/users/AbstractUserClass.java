@@ -1,10 +1,16 @@
 package users;
 
 import comments.Comment;
+import comments.CommentClass;
+import comments.CommentStance;
 import exceptions.UserHasNoFriendsException;
 import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
+
+import hashtags.HashTagClass;
 import posts.Post;
+import posts.PostClass;
+import posts.PostKind;
 
 import java.util.*;
 

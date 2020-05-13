@@ -1,5 +1,6 @@
 package fakebook;
 
+import posts.PostKind;
 import users.UserKind;
 import exceptions.*;
 import hashtags.HashTag;
@@ -22,5 +23,6 @@ public interface FakeBook {
     Iterator<User> userFriendIterator(String userID) throws UserDoesNotExistException, UserHasNoFriendsException;
     
     Iterator<Post> userPostIterator(String userID) throws UserDoesNotExistException, UserHasNoPostsException;
-    
+
+    void post(String userID, List<String> hashtags, PostKind stance, String postContent) throws InadequateStanceException;
 }

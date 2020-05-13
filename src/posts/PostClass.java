@@ -1,7 +1,6 @@
 package posts;
 
 import comments.Comment;
-import hashtags.HashTag;
 import users.User;
 
 import java.util.*;
@@ -11,15 +10,15 @@ public class PostClass implements Post {
     private int postID;
     private User author;
     private PostKind kind;
-    private Map<String, HashTag> hashtags;
+    private List<String> hashtags;
     private SortedMap<String, Comment> commentThread;
     private String postText;
 
-    public PostClass(int postID, User author, PostKind kind, HashTag hashtags, Comment commentThread, String postText) {
+    public PostClass(int postID, User author, PostKind kind, List<String> hashtags, String postText) {
         this.postID = postID;
         this.author = author;
         this.kind = kind;
-        this.hashtags = new HashMap<String, HashTag>();
+        this.hashtags = new ArrayList<String>();
         this.commentThread = new TreeMap<>();
         this.postText = postText;
     }
@@ -40,7 +39,7 @@ public class PostClass implements Post {
     	return commentThread.size();
     }
 
-    public Map<String, HashTag> getHashtags() {
+    public List<String> getHashtags() {
         return hashtags;
     }
 

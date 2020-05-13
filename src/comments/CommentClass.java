@@ -2,7 +2,7 @@ package comments;
 
 import users.User;
 
-public class CommentClass {
+public class CommentClass implements Comment {
 
     private final User author;
     private final CommentStance stance;

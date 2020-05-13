@@ -1,12 +1,17 @@
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
+import posts.PostKind;
 import users.UserKind;
 import exceptions.*;
 import fakebook.*;
 import helpmenu.HelpMenu;
 import posts.Post;
 import users.*;
+
+import javax.naming.directory.InvalidAttributesException;
 
 public class Main {
 
@@ -205,14 +210,35 @@ public class Main {
 	private static void processPost(Scanner in, FakeBook fb) {
 		try {
 			tryToProcessPost(in, fb);
-		} catch (UserDoesNotExistException | InvalidHashtagListException | InadequateStanceException e) {
+		} catch (UserDoesNotExistException | InadequateStanceException e) {
 			System.out.println(e.getMessage());
+		} catch (InvalidHashtagListException e) {
+			System.out.println(e.getMessage());
+			in.nextLine();
 		}
 	}
 
 	private static void tryToProcessPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, InvalidHashtagListException, InadequateStanceException {
-		// TODO
-	}
+		String userID = in.nextLine();
+		int hashTagCount = in.nextInt();
+
+		if (hashTagCount == 0)
+			throw new InvalidHashtagListException();
+		List<String> hashtags = new ArrayList<>(hashTagCount);
+		for (int i=0 ; i<hashTagCount ; i++) {
+			String hash = in.next();
+			if (hashtags.contains(hash))
+				throw new InvalidHashtagListException();
+			hashtags.add(hash);
+		}
+		in.nextLine();
+
+		String postStance = in.next();
+		PostKind stance = getPostKind(postStance);
+		String postContent = in.nextLine().trim();
+
+		fb.post(userID, hashtags, stance, postContent);
+ 	}
 
 
 	private static void processUserPosts(Scanner in, FakeBook fb) {
@@ -230,7 +256,7 @@ public class Main {
 		System.out.println(userID + " posts:");
 		while (iter.hasNext()) {
 			Post post = iter.next();
-			System.out.printf("%d. [%d] %d [%d comments]", post.getPostID(), post.getKind().getString(), post.getPostText(), post.getCommentCount());
+			System.out.printf("%d. [%s] %s [%d comments]\n", post.getPostID(), post.getKind().getString(), post.getPostText(), post.getCommentCount());
 		}
 	}
 
@@ -368,5 +394,12 @@ public class Main {
 				return uk;
 		}
 		throw new InvalidUserKindException(userKind);
+	}
+
+	private static PostKind getPostKind(String postKind) {
+		for (PostKind pk : PostKind.values())
+			if (pk.getString().equals(postKind))
+				return pk;
+		return null;
 	}
 }

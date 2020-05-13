@@ -29,4 +29,8 @@ public class UserFanaticClass extends AbstractUserClass implements UserFanatic {
         else if (stance.equals(HATES))
             hates.put(topic, new HashTagClass(topic));
     }
+
+    public boolean hasHateFor(String fanaticism) {
+        return hates.containsKey(fanaticism);
+    }
 }

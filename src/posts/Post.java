@@ -1,10 +1,9 @@
 package posts;
 
-import java.util.Map;
+import java.util.List;
 import java.util.SortedMap;
 
 import comments.Comment;
-import hashtags.HashTag;
 import users.User;
 
 public interface Post {
@@ -17,7 +16,7 @@ public interface Post {
 	
 	int getCommentCount();
 	
-	Map<String, HashTag> getHashtags();
+	List<String> getHashtags();
 	
 	SortedMap<String, Comment> getCommentThread();
 	
