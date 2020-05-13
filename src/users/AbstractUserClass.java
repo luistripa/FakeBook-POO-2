@@ -85,6 +85,20 @@ public abstract class AbstractUserClass implements User {
     public Post getPost(int postID) {
     	return postsMade.get(postID);
     }
-    
-    
+
+    @Override
+    public void post(Post post) {
+        postsMade.put(post.getPostID(), post);
+        for (User friend:
+             friends.values()) {
+            friend.receivePost(post);
+        }
+    }
+
+    @Override
+    public void receivePost(Post post) {
+        postsReceived.put(post.getPostID(), post);
+    }
+
+
 }

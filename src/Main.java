@@ -221,7 +221,7 @@ public class Main {
 	}
 
 	private static void tryToProcessPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, InvalidHashtagListException, InadequateStanceException {
-		String userID = in.nextLine();
+		String userID = in.nextLine().trim();
 		int hashTagCount = in.nextInt();
 
 		if (hashTagCount == 0)
@@ -239,7 +239,9 @@ public class Main {
 		PostKind stance = getPostKind(postStance);
 		String postContent = in.nextLine().trim();
 
-		fb.post(userID, hashtags, stance, postContent);
+		int postID = fb.post(userID, hashtags, stance, postContent);
+
+		System.out.printf("%s sent a %s post to %d friends. Post id = %d.\n", userID, stance.getString(), fb.getUserFriendCount(userID), postID);
  	}
 
 
@@ -285,7 +287,7 @@ public class Main {
 	}
 
 	private static void tryToProcessReadPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, PostDoesNotExistException, NoCommentsException {
-		String userID = in.nextLine();
+		String userID = in.nextLine().trim();
 		int postID = in.nextInt(); in.nextLine();
 		
 		PostKind kind = fb.getPostKind(userID, postID);

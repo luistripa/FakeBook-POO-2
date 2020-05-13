@@ -28,12 +28,13 @@ public interface FakeBook {
     
     Iterator<Post> userPostIterator(String userID) throws UserDoesNotExistException, UserHasNoPostsException;
 
-    void post(String userID, List<String> hashtags, PostKind stance, String postContent) throws InadequateStanceException;
+    int post(String userID, List<String> hashtags, PostKind stance, String postContent) throws UserDoesNotExistException, InadequateStanceException;
     
     String getPostContent(String userID, int postID) throws UserDoesNotExistException, PostDoesNotExistException;
     
     Iterator<Comment> postCommentsIterator(String userID, int postID) throws UserDoesNotExistException, PostDoesNotExistException, NoCommentsException;
     
     PostKind getPostKind(String userID, int postID) throws UserDoesNotExistException, PostDoesNotExistException;
-    
+
+    int getUserFriendCount(String userID) throws UserDoesNotExistException;
 }

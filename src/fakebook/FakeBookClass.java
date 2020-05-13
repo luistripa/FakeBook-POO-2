@@ -15,11 +15,13 @@ import comments.Comment;
 public class FakeBookClass implements FakeBook {
 
     private Map<String, User> users;
+    private Map<Integer, Post> posts;
 
     private int postIDCounter;
 
     public FakeBookClass() {
         users = new TreeMap<>();
+        posts = new TreeMap<>();
         postIDCounter = 1;
     }
 
@@ -87,8 +89,10 @@ public class FakeBookClass implements FakeBook {
     }
 
     @Override
-    public void post(String userID, List<String> hashtags, PostKind stance, String postContent) throws InadequateStanceException {
+    public int post(String userID, List<String> hashtags, PostKind stance, String postContent) throws UserDoesNotExistException, InadequateStanceException {
         User user = users.get(userID);
+        if (user == null)
+            throw new UserDoesNotExistException(userID);
         UserKind userKind = user.getUserKind();
 
         // Check for inadequate stance
@@ -100,7 +104,13 @@ public class FakeBookClass implements FakeBook {
         // Create the post
         Post post = new PostClass(postIDCounter, user, stance, hashtags, postContent);
 
-        user.post(post); // TODO: Implement method post(Post) in UserClass
+        // Post to the user feed. This includes sending the posts to all his friends, if there is any.
+        user.post(post);
+
+        // Save the post in the database for easier access
+        posts.put(post.getPostID(), post);
+
+        return postIDCounter++;
 
     }
 
@@ -137,6 +147,14 @@ public class FakeBookClass implements FakeBook {
     	if (post == null)
     		throw new PostDoesNotExistException(userID, postID);
     	return post.getKind();
+    }
+
+    @Override
+    public int getUserFriendCount(String userID) throws UserDoesNotExistException {
+        User user = users.get(userID);
+        if (user == null)
+            throw new UserDoesNotExistException(userID);
+        return user.getFriendCount();
     }
 
 

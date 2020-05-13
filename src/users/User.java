@@ -27,4 +27,7 @@ public interface User {
     
     Post getPost(int postID);
 
+    void post(Post post);
+
+    void receivePost(Post post);
 }

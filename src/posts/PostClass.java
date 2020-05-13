@@ -18,7 +18,7 @@ public class PostClass implements Post {
         this.postID = postID;
         this.author = author;
         this.kind = kind;
-        this.hashtags = new ArrayList<>();
+        this.hashtags = new ArrayList<>(hashtags);
         this.commentThread = new ArrayList<>();
         this.postContent = postContent;
     }
