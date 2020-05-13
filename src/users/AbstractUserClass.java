@@ -32,33 +32,39 @@ public abstract class AbstractUserClass implements User {
         commentsOnPosts = new HashMap<>();
     }
 
-
+    @Override
     public String getID() {
         return ID;
     }
 
+    @Override
     public UserKind getUserKind() {
         return userKind;
     }
 
+    @Override
     public int getFriendCount() {
         return friends.size();
     }
 
+    @Override
     public int getPostsCount() {
         return postsMade.size();
     }
 
+    @Override
     public int getCommentsCount() {
         return commentsOnPosts.size();
     }
 
+    @Override
     public void addFriend(User user) throws UsersAreAlreadyFriendsException {
         if (friends.containsKey(user.getID()))
             throw new UsersAreAlreadyFriendsException(this.getID(), user.getID());
         friends.put(user.getID(), user);
     }
 
+    @Override
     public Iterator<User> friendIterator() throws UserHasNoFriendsException {
         if (getFriendCount() == 0)
             throw new UserHasNoFriendsException(this.getID());
@@ -66,6 +72,7 @@ public abstract class AbstractUserClass implements User {
         return list.iterator();
     }
     
+    @Override
     public Iterator<Post> postsIterator() throws UserHasNoPostsException{
     	if (getPostsCount() == 0) {
     		throw new UserHasNoPostsException(this.getID());
@@ -73,5 +80,11 @@ public abstract class AbstractUserClass implements User {
     	List<Post> list = new ArrayList<>(postsMade.values());
     	return list.iterator();
     }
+    
+    @Override
+    public Post getPost(int postID) {
+    	return postsMade.get(postID);
+    }
+    
     
 }

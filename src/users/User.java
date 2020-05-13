@@ -24,5 +24,7 @@ public interface User {
     Iterator<User> friendIterator() throws UserHasNoFriendsException;
     
     Iterator<Post> postsIterator() throws UserHasNoPostsException;
+    
+    Post getPost(int postID);
 
 }

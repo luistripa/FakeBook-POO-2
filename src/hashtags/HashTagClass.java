@@ -8,6 +8,7 @@ public class HashTagClass implements HashTag {
         this.hashtag = hashtag;
     }
 
+    @Override
     public String getHashtag() {
         return hashtag;
     }

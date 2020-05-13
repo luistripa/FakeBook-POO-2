@@ -6,23 +6,26 @@ public class CommentClass implements Comment {
 
     private final User author;
     private final CommentStance stance;
-    private final String commentText;
+    private final String commentContent;
 
-    public CommentClass(User author, CommentStance stance, String commentText) {
+    public CommentClass(User author, CommentStance stance, String commentContent) {
         this.author = author;
         this.stance = stance;
-        this.commentText = commentText;
+        this.commentContent = commentContent;
     }
 
+    @Override
     public User getAuthor() {
         return author;
     }
 
+    @Override
     public CommentStance getStance() {
         return stance;
     }
 
-    public String getCommentText() {
-        return commentText;
+    @Override
+    public String getCommentContent() {
+        return commentContent;
     }
 }

@@ -21,6 +21,7 @@ public class UserFanaticClass extends AbstractUserClass implements UserFanatic {
         hates = new HashMap<>();
     }
 
+    @Override
     public void createNewFanaticism(String stance, String topic) throws InvalidFanaticismListException {
         if (loves.containsKey(topic) || hates.containsKey(topic))
             throw new InvalidFanaticismListException();
@@ -30,6 +31,7 @@ public class UserFanaticClass extends AbstractUserClass implements UserFanatic {
             hates.put(topic, new HashTagClass(topic));
     }
 
+    @Override
     public boolean hasHateFor(String fanaticism) {
         return hates.containsKey(fanaticism);
     }

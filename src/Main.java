@@ -13,6 +13,8 @@ import users.*;
 
 import javax.naming.directory.InvalidAttributesException;
 
+import comments.Comment;
+
 public class Main {
 
 	// Command constants
@@ -256,7 +258,7 @@ public class Main {
 		System.out.println(userID + " posts:");
 		while (iter.hasNext()) {
 			Post post = iter.next();
-			System.out.printf("%d. [%s] %s [%d comments]\n", post.getPostID(), post.getKind().getString(), post.getPostText(), post.getCommentCount());
+			System.out.printf("%d. [%s] %s [%d comments]\n", post.getPostID(), post.getKind().getString(), post.getPostContent(), post.getCommentCount());
 		}
 	}
 
@@ -277,13 +279,24 @@ public class Main {
 	private static void processReadPost(Scanner in, FakeBook fb) {
 		try {
 			tryToProcessReadPost(in, fb);
-		} catch (UserDoesNotExistException | UserHasNoPostWithIDException | NoCommentsException e) {
+		} catch (UserDoesNotExistException | PostDoesNotExistException | NoCommentsException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessReadPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoPostWithIDException, NoCommentsException {
-		// TODO
+	private static void tryToProcessReadPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, PostDoesNotExistException, NoCommentsException {
+		String userID = in.nextLine();
+		int postID = in.nextInt(); in.nextLine();
+		
+		PostKind kind = fb.getPostKind(userID, postID);
+		
+		System.out.println("[" + userID + " " + kind + "] " + fb.getPostContent(userID, postID));
+		
+		Iterator<Comment> iter = fb.postCommentsIterator(userID, postID);
+		while (iter.hasNext()) {
+			Comment comment = iter.next();
+			System.out.println("[" + userID + " " + kind + "] " + comment.getCommentContent());
+		}
 	}
 
 

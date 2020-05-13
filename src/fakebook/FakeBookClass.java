@@ -10,6 +10,8 @@ import users.*;
 
 import java.util.*;
 
+import comments.Comment;
+
 public class FakeBookClass implements FakeBook {
 
     private Map<String, User> users;
@@ -21,7 +23,7 @@ public class FakeBookClass implements FakeBook {
         postIDCounter = 1;
     }
 
-
+    @Override
     public boolean hasUser(String userID) {
         return users.containsKey(userID);
     }
@@ -102,6 +104,40 @@ public class FakeBookClass implements FakeBook {
 
     }
 
+    @Override
+    public String getPostContent(String userID, int postID) throws UserDoesNotExistException, PostDoesNotExistException {
+    	User user = users.get(userID);
+    	if (user == null)
+    		throw new UserDoesNotExistException(userID);
+    	Post post = user.getPost(postID);
+    	if (post == null)
+    		throw new PostDoesNotExistException(userID, postID);
+    	return post.getPostContent();
+    }
+    
+    @Override
+    public Iterator<Comment> postCommentsIterator(String userID, int postID) throws UserDoesNotExistException, PostDoesNotExistException, NoCommentsException {
+    	User user = users.get(userID);
+    	if (user == null)
+    		throw new UserDoesNotExistException(userID);
+    	Post post = user.getPost(postID);
+    	if (post == null)
+    		throw new PostDoesNotExistException(userID, postID);
+    	if (post.getCommentCount() == 0)
+    		throw new NoCommentsException();
+    	return post.commentThread();
+    }
+    
+    @Override
+    public PostKind getPostKind(String userID, int postID) throws UserDoesNotExistException, PostDoesNotExistException {
+    	User user = users.get(userID);
+    	if (user == null)
+    		throw new UserDoesNotExistException(userID);
+    	Post post = user.getPost(postID);
+    	if (post == null)
+    		throw new PostDoesNotExistException(userID, postID);
+    	return post.getKind();
+    }
 
 
     /* Private Methods */

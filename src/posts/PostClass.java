@@ -11,46 +11,54 @@ public class PostClass implements Post {
     private User author;
     private PostKind kind;
     private List<String> hashtags;
-    private SortedMap<String, Comment> commentThread;
-    private String postText;
+    private List<Comment> commentThread;
+    private String postContent;
 
-    public PostClass(int postID, User author, PostKind kind, List<String> hashtags, String postText) {
+    public PostClass(int postID, User author, PostKind kind, List<String> hashtags, String postContent) {
         this.postID = postID;
         this.author = author;
         this.kind = kind;
-        this.hashtags = new ArrayList<String>();
-        this.commentThread = new TreeMap<>();
-        this.postText = postText;
+        this.hashtags = new ArrayList<>();
+        this.commentThread = new ArrayList<>();
+        this.postContent = postContent;
     }
 
+    @Override
     public int getPostID() {
         return postID;
     }
 
+    @Override
     public User getAuthor() {
         return author;
     }
 
+    @Override
     public PostKind getKind() {
         return kind;
     }
     
+    @Override
     public int getCommentCount() {
     	return commentThread.size();
     }
 
+    @Override
     public List<String> getHashtags() {
         return hashtags;
     }
 
+    @Override
     public Iterator<Comment> commentThread() {
-        return commentThread.values().iterator();
+        return commentThread.iterator();
     }
 
-    public String getPostText() {
-        return postText;
+    @Override
+    public String getPostContent() {
+        return postContent;
     }
 
+    @Override
     public boolean equals(Object obj) {
         if (this == obj)
             return true;
@@ -63,6 +71,7 @@ public class PostClass implements Post {
 
     }
 
+    @Override
     public int compareTo(Post other) {
         return 0;
     }

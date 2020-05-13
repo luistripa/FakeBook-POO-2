@@ -21,7 +21,7 @@ public interface Post {
 	
 	Iterator<Comment> commentThread();
 	
-	String getPostText();
+	String getPostContent();
 	
 	int compareTo(Post other);
 	
