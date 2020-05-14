@@ -2,7 +2,7 @@ package users;
 
 import exceptions.InvalidFanaticismListException;
 
-public interface UserFanatic {
+public interface UserFanatic extends User {
 
     void createNewFanaticism(String stance, String topic) throws InvalidFanaticismListException;
 

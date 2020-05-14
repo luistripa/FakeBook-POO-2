@@ -7,7 +7,7 @@ import hashtags.HashTagClass;
 import java.util.HashMap;
 import java.util.Map;
 
-public class UserFanaticClass extends AbstractUserClass implements UserFanatic {
+public class UserFanaticClass extends UserClass implements UserFanatic {
 
     private static final String LOVES = "loves";
     private static final String HATES = "hates";
