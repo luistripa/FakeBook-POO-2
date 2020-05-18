@@ -75,5 +75,15 @@ public class PostClass implements Post {
     public int compareTo(Post other) {
         return 0;
     }
-    
+
+    @Override
+    public boolean isHonest() {
+        return getKind() == PostKind.HONEST;
+    }
+
+    @Override
+    public void comment(Comment comment) {
+        commentThread.add(comment);
+    }
+
 }

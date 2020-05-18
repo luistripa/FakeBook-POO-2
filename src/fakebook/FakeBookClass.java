@@ -1,6 +1,8 @@
 package fakebook;
 
 
+import comments.CommentClass;
+import comments.CommentStance;
 import exceptions.*;
 import hashtags.HashTag;
 import posts.Post;
@@ -155,6 +157,54 @@ public class FakeBookClass implements FakeBook {
         if (user == null)
             throw new UserDoesNotExistException(userID);
         return user.getFriendCount();
+    }
+
+    @Override
+    public void comment(String userID, String authorID, int postID, CommentStance commentStance, String commentText) throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException {
+        User user = users.get(userID);
+        User author = users.get(authorID);
+
+        // Check if users exist
+        if (user == null)
+            throw new UserDoesNotExistException(userID);
+        if (author == null)
+            throw new UserDoesNotExistException(authorID);
+
+        // Check if author has the post
+        if (author.getPost(postID) == null)
+            throw new PostDoesNotExistException(authorID, postID);
+
+        // Check if user has access to the post (is a friend)
+        Post post;
+        if (author == user)
+            post = author.getPost(postID);
+        else {
+            post = user.getReceivedPost(postID);
+            if (post == null)
+                throw new UserHasNoAccessToPostException(userID, postID, authorID);
+        }
+
+        // Check if user can post on the post
+        UserKind userKind = user.getUserKind();
+        if (userKind == UserKind.SELFCENTERED && post.getAuthor() != user)
+            throw new CannotCommentOnPostException(userID);
+        else if (userKind == UserKind.NAIVE && commentStance == CommentStance.NEGATIVE)
+            throw new CannotCommentOnPostException(userID);
+        else if (userKind == UserKind.LIAR && post.isHonest() == (commentStance == CommentStance.POSITIVE))
+            throw new CannotCommentOnPostException(userID);
+
+        // Check if user is fanatic and if he can post on the post
+        UserFanatic userFanatic;
+        if (userKind == UserKind.FANATIC) {
+            userFanatic = (UserFanatic) user;
+            boolean fanaticismPositive = userFanatic.isFanaticismPositive(post.getHashtags());
+            if ( (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE ^ fanaticismPositive) )
+                throw new InvalidCommentStanceException();
+        }
+
+        Comment comment = new CommentClass(author, commentStance, post.getHashtags(), commentText);
+        user.comment(comment);
+        post.comment(comment);
     }
 
 

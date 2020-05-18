@@ -1,4 +1,4 @@
-package helpmenu;
+package enums;
 
 public enum HelpMenu {
     REGISTER("register - registers a new user"),

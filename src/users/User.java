@@ -1,5 +1,6 @@
 package users;
 
+import comments.Comment;
 import exceptions.UserHasNoFriendsException;
 import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
@@ -30,4 +31,8 @@ public interface User {
     void post(Post post);
 
     void receivePost(Post post);
+
+    Post getReceivedPost(int postID);
+
+    void comment(Comment comment);
 }

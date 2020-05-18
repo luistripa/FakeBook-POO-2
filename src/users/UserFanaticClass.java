@@ -5,6 +5,7 @@ import hashtags.HashTag;
 import hashtags.HashTagClass;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class UserFanaticClass extends UserClass implements UserFanatic {
@@ -35,4 +36,15 @@ public class UserFanaticClass extends UserClass implements UserFanatic {
     public boolean hasHateFor(String fanaticism) {
         return hates.containsKey(fanaticism);
     }
+
+    @Override
+    public boolean isFanaticismPositive(List<String> hashtags) {
+        for (String hashtag:
+             hashtags) {
+            if (loves.containsKey(hashtag))
+                return true;
+        }
+        return false;
+    }
+
 }

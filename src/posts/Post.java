@@ -24,5 +24,8 @@ public interface Post {
 	String getPostContent();
 	
 	int compareTo(Post other);
-	
+
+    boolean isHonest();
+
+    void comment(Comment comment);
 }

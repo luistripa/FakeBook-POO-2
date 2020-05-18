@@ -15,7 +15,7 @@ public class UserClass implements User {
     private Map<String, User> friends;
     private Map<Integer, Post> postsMade;
     private Map<Integer, Post> postsReceived;
-    private Map<String, Comment> commentsOnPosts;
+    private List<Comment> commentsOnPosts;
 
     public UserClass(String ID, UserKind userKind) {
         this.ID = ID;
@@ -23,7 +23,7 @@ public class UserClass implements User {
         friends = new TreeMap<>();
         postsMade = new HashMap<>();
         postsReceived = new HashMap<>();
-        commentsOnPosts = new HashMap<>();
+        commentsOnPosts = new ArrayList<>();
     }
 
     @Override
@@ -93,4 +93,16 @@ public class UserClass implements User {
     public void receivePost(Post post) {
         postsReceived.put(post.getPostID(), post);
     }
+
+    @Override
+    public Post getReceivedPost(int postID) {
+        return postsReceived.get(postID);
+    }
+
+    @Override
+    public void comment(Comment comment) {
+        commentsOnPosts.add(comment);
+    }
+
+
 }

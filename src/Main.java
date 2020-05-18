@@ -3,9 +3,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
+import comments.CommentStance;
 import exceptions.*;
 import fakebook.*;
-import helpmenu.HelpMenu;
+import enums.HelpMenu;
 import posts.*;
 import users.*;
 import enums.*;
@@ -17,6 +18,7 @@ public class Main {
 	// Success output messages
 	public static final String USER_REGISTER	= "%s registered.\n";
 	public static final String FRIEND_ADDED 	= "%s is friend of %s\n";
+	public static final String COMMENT_ADDED	= "Comment added!";
 	public static final String EXIT_MESSAGE 	= "Bye!";
 
 	// Error output messages
@@ -252,7 +254,17 @@ public class Main {
 	}
 
 	private static void tryToProcessComment(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException {
-		// TODO
+		String userID = in.nextLine().trim();
+		String authorID = in.nextLine();
+		int postID = in.nextInt();
+		String stance = in.next();
+		String comment = in.nextLine().trim();
+
+		CommentStance commentStance = getCommentStance(stance);
+
+		fb.comment(userID, authorID, postID, commentStance, comment);
+
+		System.out.println(COMMENT_ADDED);
 	}
 
 
@@ -386,17 +398,18 @@ public class Main {
 	}
 
 	private static UserKind getUserKind(String userKind) throws InvalidUserKindException {
-		for (UserKind uk: UserKind.values()) {
-			if (uk.getString().equals(userKind))
-				return uk;
+		try {
+			return UserKind.valueOf(userKind.toUpperCase());
+		} catch (IllegalArgumentException e) {
+			throw new InvalidUserKindException(userKind);
 		}
-		throw new InvalidUserKindException(userKind);
 	}
 
 	private static PostKind getPostKind(String postKind) {
-		for (PostKind pk : PostKind.values())
-			if (pk.getString().equals(postKind))
-				return pk;
-		return null;
+		return PostKind.valueOf(postKind.toUpperCase());
+	}
+
+	private static CommentStance getCommentStance(String commentStance) {
+		return CommentStance.valueOf(commentStance.toUpperCase());
 	}
 }

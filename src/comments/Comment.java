@@ -9,5 +9,7 @@ public interface Comment {
 	CommentStance getStance();
 	
 	String getCommentContent();
+
+	boolean hasTopic(String topic);
 	
 }
