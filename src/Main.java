@@ -3,38 +3,16 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import posts.PostKind;
-import users.UserKind;
 import exceptions.*;
 import fakebook.*;
 import helpmenu.HelpMenu;
-import posts.Post;
+import posts.*;
 import users.*;
-
-import javax.naming.directory.InvalidAttributesException;
+import enums.*;
 
 import comments.Comment;
 
 public class Main {
-
-	// Command constants
-	public static final String REGISTER 		= "REGISTER";
-	public static final String USERS 			= "USERS";
-	public static final String ADDFRIEND 		= "ADDFRIEND";
-	public static final String FRIENDS 			= "FRIENDS";
-	public static final String POST 			= "POST";
-	public static final String USERPOSTS 		= "USERPOSTS";
-	public static final String COMMENT 			= "COMMENT";
-	public static final String READPOST 		= "READPOST";
-	public static final String COMMENTSBYUSER 	= "COMMENTSBYUSER";
-	public static final String TOPICFANATICS 	= "TOPICFANATICS";
-	public static final String TOPICPOSTS 		= "TOPICPOSTS";
-	public static final String POPULARPOST 		= "POPULARPOST";
-	public static final String TOPPOSTER 		= "TOPPOSTER";
-	public static final String RESPONSIVE 		= "RESPONSIVE";
-	public static final String SHAMELESS 		= "SHAMELESS";
-	public static final String HELP 			= "HELP";
-	public static final String EXIT 			= "EXIT";
 
 	// Success output messages
 	public static final String USER_REGISTER	= "%s registered.\n";
@@ -53,15 +31,15 @@ public class Main {
 		// Initialize FakeBook
 		FakeBook fb = new FakeBookClass();
 
-		String command = "";
-		while (!command.equals(EXIT)) {
+		Commands command = null;
+		while (command != Commands.EXIT) {
 			command = getCommand(in);
 			processCommand(command, in, fb);
 		}
 
 	}
 
-	private static void processCommand(String command, Scanner in, FakeBook fb) {
+	private static void processCommand(Commands command, Scanner in, FakeBook fb) {
 		switch (command) {
 			case REGISTER:
 				processRegister(in, fb);
@@ -399,8 +377,12 @@ public class Main {
 			System.out.println(h.getMessage());
 	}
 
-	private static String getCommand(Scanner in) {
-		return in.next().toUpperCase();
+	private static Commands getCommand(Scanner in) {
+		try {
+			return Commands.valueOf(in.next().toUpperCase());
+		} catch (IllegalArgumentException e) {
+			return Commands.UNKNOWN;
+		}
 	}
 
 	private static UserKind getUserKind(String userKind) throws InvalidUserKindException {
