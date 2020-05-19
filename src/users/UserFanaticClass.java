@@ -28,13 +28,8 @@ public class UserFanaticClass extends UserClass implements UserFanatic {
     }
 
     @Override
-    public boolean isFanaticismPositive(List<String> hashtags) {
-        for (String hashtag:
-             hashtags) {
-            if (loves.contains(hashtag))
-                return true;
-        }
-        return false;
+    public boolean hasLoveFor(String fanaticism) {
+        return loves.contains(fanaticism);
     }
 
 }

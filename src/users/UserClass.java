@@ -5,6 +5,8 @@ import exceptions.UserHasNoFriendsException;
 import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
 import posts.Post;
+import posts.PostClass;
+import posts.PostKind;
 
 import java.util.*;
 
@@ -16,6 +18,7 @@ public class UserClass implements User {
     private Map<Integer, Post> postsMade;
     private Map<Integer, Post> postsReceived;
     private List<Comment> commentsOnPosts;
+    private int postIDCounter;
 
     public UserClass(String ID, UserKind userKind) {
         this.ID = ID;
@@ -24,6 +27,7 @@ public class UserClass implements User {
         postsMade = new HashMap<>();
         postsReceived = new HashMap<>();
         commentsOnPosts = new ArrayList<>();
+        postIDCounter = 1;
     }
 
     @Override
@@ -81,12 +85,14 @@ public class UserClass implements User {
     }
 
     @Override
-    public void post(Post post) {
+    public int post(User user, PostKind stance, List<String> hashtags, String postContent) {
+        Post post = new PostClass(postIDCounter, user, stance, hashtags, postContent);
         postsMade.put(post.getPostID(), post);
         for (User friend:
                 friends.values()) {
             friend.receivePost(post);
         }
+        return postIDCounter++;
     }
 
     @Override

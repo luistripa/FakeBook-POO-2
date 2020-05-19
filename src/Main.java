@@ -210,6 +210,7 @@ public class Main {
 		} catch (InvalidHashtagListException e) {
 			System.out.println(e.getMessage());
 			in.nextLine();
+			in.nextLine();
 		}
 	}
 
@@ -217,8 +218,7 @@ public class Main {
 		String userID = in.nextLine().trim();
 		int hashTagCount = in.nextInt();
 
-		if (hashTagCount == 0)
-			throw new InvalidHashtagListException();
+		// Get hashtags
 		List<String> hashtags = new ArrayList<>(hashTagCount);
 		for (int i=0 ; i<hashTagCount ; i++) {
 			String hash = in.next();

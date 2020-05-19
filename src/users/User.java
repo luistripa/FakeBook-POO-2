@@ -5,8 +5,10 @@ import exceptions.UserHasNoFriendsException;
 import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
 import posts.Post;
+import posts.PostKind;
 
 import java.util.Iterator;
+import java.util.List;
 
 public interface User {
 
@@ -28,7 +30,7 @@ public interface User {
     
     Post getPost(int postID);
 
-    void post(Post post);
+    int post(User user, PostKind stance, List<String> hashtags, String postContent);
 
     void receivePost(Post post);
 

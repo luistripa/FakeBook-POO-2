@@ -17,14 +17,9 @@ import comments.Comment;
 public class FakeBookClass implements FakeBook {
 
     private Map<String, User> users;
-    private Map<Integer, Post> posts;
-
-    private int postIDCounter;
 
     public FakeBookClass() {
         users = new TreeMap<>();
-        posts = new TreeMap<>();
-        postIDCounter = 1;
     }
 
     @Override
@@ -105,19 +100,13 @@ public class FakeBookClass implements FakeBook {
         // Check for inadequate stance
         if (userKind == UserKind.LIAR && stance == PostKind.HONEST)
             throw new InadequateStanceException();
-        else if (userKind == UserKind.FANATIC && !fanaticUserCanPost(user, hashtags))
+        else if (userKind == UserKind.FANATIC &&  !fanaticUserCanPost(user, hashtags, stance))
             throw new InadequateStanceException();
 
-        // Create the post
-        Post post = new PostClass(postIDCounter, user, stance, hashtags, postContent);
-
         // Post to the user feed. This includes sending the posts to all his friends, if there is any.
-        user.post(post);
+        int postID = user.post(user, stance, hashtags, postContent);
 
-        // Save the post in the database for easier access
-        posts.put(post.getPostID(), post);
-
-        return postIDCounter++;
+        return postID;
 
     }
 
@@ -199,11 +188,9 @@ public class FakeBookClass implements FakeBook {
             throw new CannotCommentOnPostException(userID);
 
         // Check if user is fanatic and if he can post on the post
-        UserFanatic userFanatic;
         if (userKind == UserKind.FANATIC) {
-            userFanatic = (UserFanatic) user;
-            boolean fanaticismPositive = userFanatic.isFanaticismPositive(post.getHashtags());
-            if ( (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE ^ fanaticismPositive) )
+            boolean canPost = fanaticUserCanPost(user, post.getHashtags(), post.getKind());
+            if ( (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE ^ canPost) )
                 throw new InvalidCommentStanceException();
         }
 
@@ -215,13 +202,22 @@ public class FakeBookClass implements FakeBook {
 
     /* Private Methods */
 
-    private boolean fanaticUserCanPost(User user, List<String> hashtags) throws InadequateStanceException {
+    private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind stance) {
         UserFanatic userFanatic;
-        if (user instanceof UserFanatic) {
-            userFanatic = (UserFanatic) user;
-            for (String fanaticism : hashtags)
-                if (userFanatic.hasHateFor(fanaticism))
-                    throw new InadequateStanceException();
+        userFanatic = (UserFanatic) user;
+
+        for (String fanaticism :
+                hashtags) {
+            if (userFanatic.hasHateFor(fanaticism))
+                if (stance == PostKind.HONEST)
+                    return false;
+                else
+                    break;
+            else if (userFanatic.hasLoveFor(fanaticism))
+                if (stance == PostKind.FAKE)
+                    return false;
+                else
+                    break;
         }
         return true;
     }
