@@ -6,5 +6,6 @@ bin/
 out/
 FakeBookTests/
 tests/
+venv/
 .project
 .classpath
