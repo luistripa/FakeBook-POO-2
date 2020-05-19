@@ -17,12 +17,12 @@ public class Main {
 
 	// Success output messages
 	public static final String USER_REGISTER	= "%s registered.\n";
-	public static final String FRIEND_ADDED 	= "%s is friend of %s\n";
+	public static final String FRIEND_ADDED 	= "%s is friend of %s.\n";
 	public static final String COMMENT_ADDED	= "Comment added!";
 	public static final String EXIT_MESSAGE 	= "Bye!";
 
 	// Error output messages
-	public static final String UNKNOWN_COMMAND = "Unknown command";
+	public static final String UNKNOWN_COMMAND = "Unknown command. Type help to see available commands.";
 
 
 	public static void main(String[] args) {
@@ -96,6 +96,7 @@ public class Main {
 				break;
 			default:
 				System.out.println(UNKNOWN_COMMAND);
+				in.nextLine();
 				break;
 		}
 	}
@@ -117,16 +118,28 @@ public class Main {
 		String userID = in.nextLine().trim();
 		UserKind kind = getUserKind(userKind);
 
-		fb.addUser(userID, kind);
 		if (kind == UserKind.FANATIC) {
+
+			List<String> loves = new ArrayList<>();
+			List<String> hates = new ArrayList<>();
+
 			int fanaticismCount = in.nextInt();
 			for (int i = 0; i < fanaticismCount; i++) {
 				String stance = in.next();
 				String topic = in.next();
-				fb.createNewFanaticism(userID, stance, topic);
+				if (loves.contains(topic) || hates.contains(topic))
+					throw new InvalidFanaticismListException();
+				else {
+					if (stance.equals("loves"))
+						loves.add(topic);
+					else
+						hates.add(topic);
+				}
 			}
 			in.nextLine();
-		}
+			fb.addUser(userID, kind, loves, hates);
+		} else
+			fb.addUser(userID, kind);
 		System.out.printf(USER_REGISTER, userID);
 	}
 
@@ -151,12 +164,12 @@ public class Main {
 	private static void processAddFriend(Scanner in, FakeBook fb) {
 		try {
 			tryToProcessAddFriend(in, fb);
-		} catch (UserDoesNotExistException | UsersAreAlreadyFriendsException e) {
+		} catch (UserDoesNotExistException | UsersAreAlreadyFriendsException | UserCannotFriendItselfException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessAddFriend(Scanner in, FakeBook fb) throws UserDoesNotExistException, UsersAreAlreadyFriendsException {
+	private static void tryToProcessAddFriend(Scanner in, FakeBook fb) throws UserDoesNotExistException, UsersAreAlreadyFriendsException, UserCannotFriendItselfException {
 		String u1_ID = in.nextLine().trim();
 		String u2_ID = in.nextLine().trim();
 

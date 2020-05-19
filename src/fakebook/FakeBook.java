@@ -16,14 +16,14 @@ import comments.Comment;
 public interface FakeBook {
 
 	boolean hasUser(String userID);
-	
+
     void addUser(String userID, UserKind userKind) throws UserAlreadyExistsException;
 
-    void createNewFanaticism(String userID, String stance, String topic) throws InvalidFanaticismListException;
+    void addUser(String userID, UserKind userKind, List<String> loves, List<String> hates) throws UserAlreadyExistsException;
 
     Iterator<User> userIterator() throws NoUsersException;
 
-    void addFriend(String u1_ID, String u2_ID) throws UserDoesNotExistException, UsersAreAlreadyFriendsException;
+    void addFriend(String u1_ID, String u2_ID) throws UserDoesNotExistException, UsersAreAlreadyFriendsException, UserCannotFriendItselfException;
 
     Iterator<User> userFriendIterator(String userID) throws UserDoesNotExistException, UserHasNoFriendsException;
     

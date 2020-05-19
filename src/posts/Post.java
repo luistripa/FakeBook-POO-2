@@ -22,8 +22,6 @@ public interface Post {
 	Iterator<Comment> commentThread();
 	
 	String getPostContent();
-	
-	int compareTo(Post other);
 
     boolean isHonest();
 

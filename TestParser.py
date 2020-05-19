@@ -1,31 +1,20 @@
 from os import system
 
-TEST_LIST = [
-	"base_add",
-	"base_upload",
-	"base_share",
-	"minspace",
-	"pre_add",
-	"pre_upload",
-	"pre_share",
-	"pre_listfiles"
-]
+NUMBER_OF_TESTS = 16
 
-NUMBER_OF_TESTS = len(TEST_LIST)
+system("cd src/ ; javac -Xlint -d ../bin/production/FakeBook Main.java ; cd ..")
 
-system("cd src/ ; javac -Xlint -d ../out/production/FakeBook Main.java ; cd ..")
-
-COMMAND_RUN = "cd out/production/FakeBook ; java Main < ../../../FakeBookTests/%d_in_%s.txt > ../../../tests/%d_%s_test_out.txt"
+COMMAND_RUN = "cd bin/production/FakeBook ; java Main < ../../../FakeBookTests/fakebook%.2din.txt > ../../../tests/fakebook%.2d_test_out.txt"
 
 for i in range(0, NUMBER_OF_TESTS):
-	system(COMMAND_RUN % (i+1, TEST_LIST[i], i+1, TEST_LIST[i]))
-	code = system("diff tests/%d_%s_test_out.txt FakeBookTests/%d_out_%s.txt" % (i+1, TEST_LIST[i], i+1, TEST_LIST[i]))
+	system(COMMAND_RUN % (i, i))
+	code = system("diff tests/fakebook%.2d_test_out.txt FakeBookTests/fakebook%.2dout.txt" % (i, i))
 	if code != 0:
 		print("------------------------")
-		print("       FAILED %.2s        " % str(i+1))
+		print("       FAILED %.2s        " % str(i))
 		print("------------------------")
 		exit(0)
 	else:
 		print("------------------------")
-		print("       PASSED %.2s        " % str(i+1))
+		print("       PASSED %.2s        " % str(i))
 		print("------------------------")

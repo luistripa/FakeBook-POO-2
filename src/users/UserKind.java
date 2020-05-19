@@ -2,7 +2,7 @@ package users;
 
 public enum UserKind {
 
-    SELFCENTERED("self-centered"),
+    SELFCENTERED("selfcentered"),
     NAIVE("naive"),
     LIAR("liar"),
     FANATIC("fanatic");

@@ -38,17 +38,19 @@ public class FakeBookClass implements FakeBook {
 
         if (hasUser(userID))
             throw new UserAlreadyExistsException(userID);
-        if (userKind == UserKind.FANATIC)
-            user = new UserFanaticClass(userID, userKind);
         else
             user = new UserClass(userID, userKind);
         users.put(userID, user);
     }
 
     @Override
-    public void createNewFanaticism(String userID, String stance, String topic) throws InvalidFanaticismListException {
-        UserFanatic user = (UserFanatic) users.get(userID);
-        user.createNewFanaticism(stance, topic);
+    public void addUser(String userID, UserKind userKind, List<String> loves, List<String> hates) throws UserAlreadyExistsException {
+        User user;
+
+        if (hasUser(userID))
+            throw new UserAlreadyExistsException(userID);
+        user = new UserFanaticClass(userID, userKind, loves, hates);
+        users.put(userID, user);
     }
 
     @Override
@@ -62,14 +64,17 @@ public class FakeBookClass implements FakeBook {
     }
 
     @Override
-    public void addFriend(String u1_ID, String u2_ID) throws UserDoesNotExistException, UsersAreAlreadyFriendsException {
+    public void addFriend(String u1_ID, String u2_ID) throws UserDoesNotExistException, UsersAreAlreadyFriendsException, UserCannotFriendItselfException {
         User user1 = users.get(u1_ID);
         User user2 = users.get(u2_ID);
-        if (user1 == null) {
-            if (user2 == null)
-                throw new UserDoesNotExistException(u2_ID);
+
+        if (user1 == null)
             throw new UserDoesNotExistException(u1_ID);
-        }
+        if (user2 == null)
+            throw new UserDoesNotExistException(u2_ID);
+        if (user1 == user2)
+            throw new UserCannotFriendItselfException(u1_ID, u2_ID);
+
         user1.addFriend(user2);
         user2.addFriend(user1);
     }
