@@ -10,4 +10,10 @@ public interface Comment {
 	
 	String getCommentContent();
 	
+	int getPostID();
+	
+	String getPostStance();
+
+	String getPostAuthor();
+	
 }

@@ -1,6 +1,7 @@
 package users;
 
 import comments.Comment;
+import exceptions.NoCommentsException;
 import exceptions.UserHasNoFriendsException;
 import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
@@ -123,5 +124,13 @@ public class UserClass implements User {
         commentCount++;
     }
 
+    @Override
+    public Iterator<Comment> commentIterator(String topic) throws NoCommentsException {
+    	if (getCommentsCount() == 0) {
+    		throw new NoCommentsException();
+    	}
+    	List<Comment> listComments = topics.get(topic);
+    	return listComments.iterator();
+    }
 
 }

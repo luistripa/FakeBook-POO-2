@@ -314,7 +314,15 @@ public class Main {
 	}
 
 	private static void tryToProcessCommentsByUser(Scanner in, FakeBook fb) throws UserDoesNotExistException, NoCommentsException  {
-		// TODO
+		String userID = in.nextLine().trim();
+		String topicID = in.nextLine().trim();
+		
+		Iterator<Comment> iter = fb.commentsByUser(userID, topicID);
+		while(iter.hasNext()) {
+			Comment comment = iter.next();
+			System.out.println("[" + comment.getPostAuthor() + " " + comment.getPostStance() + " " + comment.getPostID() + " " 
+								+ comment.getStance().getString() + "] " + comment.getCommentContent());
+		}
 	}
 
 

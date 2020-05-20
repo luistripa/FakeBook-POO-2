@@ -194,11 +194,20 @@ public class FakeBookClass implements FakeBook {
                 throw new InvalidCommentStanceException();
         }
 
-        Comment comment = new CommentClass(user, commentStance, commentText);
+        Comment comment = new CommentClass(user, post, commentStance, commentText);
         user.comment(post.getHashtags(), comment);
         post.comment(comment);
     }
 
+    @Override
+    public Iterator<Comment> commentsByUser(String userID, String topic) throws NoCommentsException, UserDoesNotExistException {
+    	User user = users.get(userID);
+    	
+    	if (user == null) {
+    		throw new UserDoesNotExistException(userID);
+    	}
+    	return user.commentIterator(topic);
+    }
 
     /* Private Methods */
 
@@ -241,4 +250,5 @@ public class FakeBookClass implements FakeBook {
         }
         return true;
     }
+    
 }
