@@ -293,14 +293,14 @@ public class Main {
 		String userID = in.nextLine().trim();
 		int postID = in.nextInt(); in.nextLine();
 		
-		PostKind kind = fb.getPostKind(userID, postID);
+		String kind = fb.getPostKind(userID, postID).getString();
 		
 		System.out.println("[" + userID + " " + kind + "] " + fb.getPostContent(userID, postID));
 		
 		Iterator<Comment> iter = fb.postCommentsIterator(userID, postID);
 		while (iter.hasNext()) {
 			Comment comment = iter.next();
-			System.out.println("[" + userID + " " + kind + "] " + comment.getCommentContent());
+			System.out.println("[" + comment.getAuthor().getID() + " " + comment.getStance().getString() + "] " + comment.getCommentContent());
 		}
 	}
 

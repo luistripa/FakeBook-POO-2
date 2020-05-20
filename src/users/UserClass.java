@@ -119,8 +119,8 @@ public class UserClass implements User {
             if (!topics.containsKey(hashtag))
                 topics.put(hashtag, new ArrayList<>());
             topics.get(hashtag).add(comment);
-            commentCount++;
         }
+        commentCount++;
     }
 
 
