@@ -16,8 +16,9 @@ public class UserClass implements User {
     private UserKind userKind;
     private Map<String, User> friends;
     private Map<Integer, Post> postsMade;
-    private Map<Integer, Post> postsReceived;
-    private List<Comment> commentsOnPosts;
+    private List<Post> postsReceived;
+    private Map<String, List<Comment>> topics;
+    private int commentCount;
     private int postIDCounter;
 
     public UserClass(String ID, UserKind userKind) {
@@ -25,8 +26,9 @@ public class UserClass implements User {
         this.userKind = userKind;
         friends = new TreeMap<>();
         postsMade = new HashMap<>();
-        postsReceived = new HashMap<>();
-        commentsOnPosts = new ArrayList<>();
+        postsReceived = new ArrayList<>();
+        topics = new HashMap<String, List<Comment>>();
+        commentCount = 0;
         postIDCounter = 1;
     }
 
@@ -52,7 +54,7 @@ public class UserClass implements User {
 
     @Override
     public int getCommentsCount() {
-        return commentsOnPosts.size();
+        return commentCount;
     }
 
     @Override
@@ -97,17 +99,28 @@ public class UserClass implements User {
 
     @Override
     public void receivePost(Post post) {
-        postsReceived.put(post.getPostID(), post);
+        postsReceived.add(post);
     }
 
     @Override
     public Post getReceivedPost(int postID) {
-        return postsReceived.get(postID);
+        for (Post post :
+                postsReceived) {
+            if (post.getPostID() == postID)
+                return post;
+        }
+        return null;
     }
 
     @Override
-    public void comment(Comment comment) {
-        commentsOnPosts.add(comment);
+    public void comment(List<String> hashtags, Comment comment) {
+        for (String hashtag :
+                hashtags) {
+            if (!topics.containsKey(hashtag))
+                topics.put(hashtag, new ArrayList<>());
+            topics.get(hashtag).add(comment);
+            commentCount++;
+        }
     }
 
 

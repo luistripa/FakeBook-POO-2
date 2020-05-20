@@ -36,5 +36,5 @@ public interface User {
 
     Post getReceivedPost(int postID);
 
-    void comment(Comment comment);
+    void comment(List<String> hashtags, Comment comment);
 }

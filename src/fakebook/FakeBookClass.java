@@ -189,13 +189,12 @@ public class FakeBookClass implements FakeBook {
 
         // Check if user is fanatic and if he can post on the post
         if (userKind == UserKind.FANATIC) {
-            boolean canPost = fanaticUserCanPost(user, post.getHashtags(), post.getKind());
-            if ( (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE ^ canPost) )
+            if ( !fanaticUserCanPost(user, post.getHashtags(), post.getKind(), commentStance) )
                 throw new InvalidCommentStanceException();
         }
 
-        Comment comment = new CommentClass(author, commentStance, post.getHashtags(), commentText);
-        user.comment(comment);
+        Comment comment = new CommentClass(user, commentStance, commentText);
+        user.comment(post.getHashtags(), comment);
         post.comment(comment);
     }
 
@@ -212,12 +211,32 @@ public class FakeBookClass implements FakeBook {
                 if (stance == PostKind.HONEST)
                     return false;
                 else
-                    break;
+                    return true;
             else if (userFanatic.hasLoveFor(fanaticism))
-                if (stance == PostKind.FAKE)
-                    return false;
+                if (stance == PostKind.HONEST)
+                    return true;
                 else
-                    break;
+                    return false;
+        }
+        return true;
+    }
+
+    private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind postStance, CommentStance commentStance) {
+        UserFanatic userFanatic;
+        userFanatic = (UserFanatic) user;
+
+        for (String fanaticism :
+                hashtags) {
+            if (userFanatic.hasHateFor(fanaticism))
+                if (postStance == PostKind.HONEST)
+                    return commentStance == CommentStance.NEGATIVE;
+                else
+                    return commentStance == CommentStance.POSITIVE;
+            else if (userFanatic.hasLoveFor(fanaticism))
+                if (postStance == PostKind.HONEST)
+                    return commentStance == CommentStance.POSITIVE;
+                else
+                    return commentStance == CommentStance.NEGATIVE;
         }
         return true;
     }
