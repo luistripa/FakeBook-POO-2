@@ -1,11 +1,8 @@
 package fakebook;
 
 import comments.CommentStance;
-import posts.PostKind;
-import users.UserKind;
 import exceptions.*;
-import hashtags.HashTag;
-import posts.Post;
+import posts.*;
 import users.*;
 
 import java.util.Iterator;

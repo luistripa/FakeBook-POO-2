@@ -1,13 +1,9 @@
 package users;
 
 import comments.Comment;
-import exceptions.NoCommentsException;
-import exceptions.UserHasNoFriendsException;
-import exceptions.UserHasNoPostsException;
-import exceptions.UsersAreAlreadyFriendsException;
+import exceptions.*;
 import posts.Post;
-import posts.PostClass;
-import posts.PostKind;
+import posts.*;
 
 import java.util.*;
 
@@ -130,6 +126,8 @@ public class UserClass implements User {
     		throw new NoCommentsException();
     	}
     	List<Comment> listComments = topics.get(topic);
+    	if (listComments == null)
+    	    throw new NoCommentsException();
     	return listComments.iterator();
     }
 

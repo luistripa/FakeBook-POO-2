@@ -1,9 +1,6 @@
 package comments;
 
 import users.User;
-
-import java.util.List;
-
 import posts.Post;
 
 public class CommentClass implements Comment {

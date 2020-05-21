@@ -1,22 +1,16 @@
 package fakebook;
 
 
-import comments.CommentClass;
-import comments.CommentStance;
+import comments.*;
 import exceptions.*;
-import hashtags.HashTag;
-import posts.Post;
-import posts.PostClass;
-import posts.PostKind;
+import posts.*;
 import users.*;
 
 import java.util.*;
 
-import comments.Comment;
-
 public class FakeBookClass implements FakeBook {
 
-    private Map<String, User> users;
+    private final Map<String, User> users;
 
     public FakeBookClass() {
         users = new TreeMap<>();
@@ -103,10 +97,8 @@ public class FakeBookClass implements FakeBook {
         else if (userKind == UserKind.FANATIC &&  !fanaticUserCanPost(user, hashtags, stance))
             throw new InadequateStanceException();
 
-        // Post to the user feed. This includes sending the posts to all his friends, if there is any.
-        int postID = user.post(user, stance, hashtags, postContent);
-
-        return postID;
+        // Post to the user feed. This includes sending the posts to all his friends, if there is any. Returns the post ID
+        return user.post(user, stance, hashtags, postContent);
 
     }
 
@@ -218,15 +210,9 @@ public class FakeBookClass implements FakeBook {
         for (String fanaticism :
                 hashtags) {
             if (userFanatic.hasHateFor(fanaticism))
-                if (stance == PostKind.HONEST)
-                    return false;
-                else
-                    return true;
+                return stance != PostKind.HONEST;
             else if (userFanatic.hasLoveFor(fanaticism))
-                if (stance == PostKind.HONEST)
-                    return true;
-                else
-                    return false;
+                return stance == PostKind.HONEST;
         }
         return true;
     }
