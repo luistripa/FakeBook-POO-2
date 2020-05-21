@@ -1,11 +1,8 @@
 package fakebook;
 
 import comments.CommentStance;
-import posts.PostKind;
-import users.UserKind;
 import exceptions.*;
-import hashtags.HashTag;
-import posts.Post;
+import posts.*;
 import users.*;
 
 import java.util.Iterator;
@@ -39,5 +36,7 @@ public interface FakeBook {
 
     int getUserFriendCount(String userID) throws UserDoesNotExistException;
 
-    void comment(String userID, String authorID, int postID, CommentStance commentStance, String commentText) throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException;
+    void comment(String userID, String authorID, int postID, CommentStance commentStance, String commentText) throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException; 
+    
+    Iterator<Comment> commentsByUser(String userID, String topic) throws NoCommentsException, UserDoesNotExistException;
 }

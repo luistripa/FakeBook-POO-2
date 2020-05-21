@@ -1,22 +1,16 @@
 package fakebook;
 
 
-import comments.CommentClass;
-import comments.CommentStance;
+import comments.*;
 import exceptions.*;
-import hashtags.HashTag;
-import posts.Post;
-import posts.PostClass;
-import posts.PostKind;
+import posts.*;
 import users.*;
 
 import java.util.*;
 
-import comments.Comment;
-
 public class FakeBookClass implements FakeBook {
 
-    private Map<String, User> users;
+    private final Map<String, User> users;
 
     public FakeBookClass() {
         users = new TreeMap<>();
@@ -103,10 +97,8 @@ public class FakeBookClass implements FakeBook {
         else if (userKind == UserKind.FANATIC &&  !fanaticUserCanPost(user, hashtags, stance))
             throw new InadequateStanceException();
 
-        // Post to the user feed. This includes sending the posts to all his friends, if there is any.
-        int postID = user.post(user, stance, hashtags, postContent);
-
-        return postID;
+        // Post to the user feed. This includes sending the posts to all his friends, if there is any. Returns the post ID
+        return user.post(user, stance, hashtags, postContent);
 
     }
 
@@ -184,21 +176,30 @@ public class FakeBookClass implements FakeBook {
             throw new CannotCommentOnPostException(userID);
         else if (userKind == UserKind.NAIVE && commentStance == CommentStance.NEGATIVE)
             throw new CannotCommentOnPostException(userID);
-        else if (userKind == UserKind.LIAR && (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE))
-            throw new CannotCommentOnPostException(userID);
+        else if (userKind == UserKind.LIAR && post.isHonest() == (commentStance == CommentStance.POSITIVE))
+            //throw new CannotCommentOnPostException(userID);
+            throw new InvalidCommentStanceException();
 
         // Check if user is fanatic and if he can post on the post
         if (userKind == UserKind.FANATIC) {
-            boolean canPost = fanaticUserCanPost(user, post.getHashtags(), post.getKind());
-            if ( (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE ^ canPost) )
+            if ( !fanaticUserCanPost(user, post.getHashtags(), post.getKind(), commentStance) )
                 throw new InvalidCommentStanceException();
         }
 
-        Comment comment = new CommentClass(author, commentStance, post.getHashtags(), commentText);
-        user.comment(comment);
+        Comment comment = new CommentClass(user, post, commentStance, commentText);
+        user.comment(post.getHashtags(), comment);
         post.comment(comment);
     }
 
+    @Override
+    public Iterator<Comment> commentsByUser(String userID, String topic) throws NoCommentsException, UserDoesNotExistException {
+    	User user = users.get(userID);
+    	
+    	if (user == null) {
+    		throw new UserDoesNotExistException(userID);
+    	}
+    	return user.commentIterator(topic);
+    }
 
     /* Private Methods */
 
@@ -209,16 +210,31 @@ public class FakeBookClass implements FakeBook {
         for (String fanaticism :
                 hashtags) {
             if (userFanatic.hasHateFor(fanaticism))
-                if (stance == PostKind.HONEST)
-                    return false;
-                else
-                    break;
+                return stance != PostKind.HONEST;
             else if (userFanatic.hasLoveFor(fanaticism))
-                if (stance == PostKind.FAKE)
-                    return false;
-                else
-                    break;
+                return stance == PostKind.HONEST;
         }
         return true;
     }
+
+    private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind postStance, CommentStance commentStance) {
+        UserFanatic userFanatic;
+        userFanatic = (UserFanatic) user;
+
+        for (String fanaticism :
+                hashtags) {
+            if (userFanatic.hasHateFor(fanaticism))
+                if (postStance == PostKind.HONEST)
+                    return commentStance == CommentStance.NEGATIVE;
+                else
+                    return commentStance == CommentStance.POSITIVE;
+            else if (userFanatic.hasLoveFor(fanaticism))
+                if (postStance == PostKind.HONEST)
+                    return commentStance == CommentStance.POSITIVE;
+                else
+                    return commentStance == CommentStance.NEGATIVE;
+        }
+        return true;
+    }
+    
 }

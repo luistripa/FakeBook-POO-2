@@ -9,7 +9,11 @@ public interface Comment {
 	CommentStance getStance();
 	
 	String getCommentContent();
+	
+	int getPostID();
+	
+	String getPostStance();
 
-	boolean hasTopic(String topic);
+	String getPostAuthor();
 	
 }

@@ -1,6 +1,7 @@
 package users;
 
 import comments.Comment;
+import exceptions.NoCommentsException;
 import exceptions.UserHasNoFriendsException;
 import exceptions.UserHasNoPostsException;
 import exceptions.UsersAreAlreadyFriendsException;
@@ -36,5 +37,8 @@ public interface User {
 
     Post getReceivedPost(int postID);
 
-    void comment(Comment comment);
+    void comment(List<String> hashtags, Comment comment);
+    
+    Iterator<Comment> commentIterator(String topic) throws NoCommentsException;
+    
 }

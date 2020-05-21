@@ -2,10 +2,16 @@ package comments;
 
 public enum CommentStance {
 
-    POSITIVE(),
-    NEGATIVE();
+    POSITIVE("positive"),
+    NEGATIVE("negative");
 
-    CommentStance() {
+    private String string;
 
+    CommentStance(String string) {
+        this.string = string;
+    }
+
+    public String getString() {
+        return string;
     }
 }
