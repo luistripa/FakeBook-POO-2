@@ -184,7 +184,7 @@ public class FakeBookClass implements FakeBook {
             throw new CannotCommentOnPostException(userID);
         else if (userKind == UserKind.NAIVE && commentStance == CommentStance.NEGATIVE)
             throw new CannotCommentOnPostException(userID);
-        else if (userKind == UserKind.LIAR && post.isHonest() == (commentStance == CommentStance.POSITIVE))
+        else if (userKind == UserKind.LIAR && (post.getKind() == PostKind.HONEST) == (commentStance == CommentStance.POSITIVE))
             throw new CannotCommentOnPostException(userID);
 
         // Check if user is fanatic and if he can post on the post

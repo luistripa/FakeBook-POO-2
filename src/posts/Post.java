@@ -23,7 +23,5 @@ public interface Post {
 	
 	String getPostContent();
 
-    boolean isHonest();
-
     void comment(Comment comment);
 }

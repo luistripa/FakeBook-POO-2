@@ -59,11 +59,6 @@ public class PostClass implements Post {
     }
 
     @Override
-    public boolean isHonest() {
-        return getKind() == PostKind.HONEST;
-    }
-
-    @Override
     public void comment(Comment comment) {
         commentThread.add(comment);
     }
