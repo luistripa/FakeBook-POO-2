@@ -23,6 +23,8 @@ public interface User {
 
     int getCommentsCount();
 
+    int getPostIDCounter();
+
     void addFriend(User user) throws UsersAreAlreadyFriendsException;
 
     Iterator<User> friendIterator() throws UserHasNoFriendsException;
@@ -31,7 +33,7 @@ public interface User {
     
     Post getPost(int postID);
 
-    int post(User user, PostKind stance, List<String> hashtags, String postContent);
+    void post(Post post);
 
     void receivePost(Post post);
 
@@ -40,5 +42,5 @@ public interface User {
     void comment(List<String> hashtags, Comment comment);
     
     Iterator<Comment> commentIterator(String topic) throws NoCommentsException;
-    
+
 }

@@ -8,13 +8,13 @@ import users.User;
 
 public interface Post {
 
-	int getPostID();
+	Integer getPostID();
 	
 	User getAuthor();
 	
 	PostKind getKind();
 	
-	int getCommentCount();
+	Integer getCommentCount();
 	
 	List<String> getHashtags();
 	

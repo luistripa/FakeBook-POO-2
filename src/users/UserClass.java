@@ -24,7 +24,7 @@ public class UserClass implements User {
         friends = new TreeMap<>();
         postsMade = new HashMap<>();
         postsReceived = new ArrayList<>();
-        topics = new HashMap<String, List<Comment>>();
+        topics = new HashMap<>();
         commentCount = 0;
         postIDCounter = 1;
     }
@@ -52,6 +52,11 @@ public class UserClass implements User {
     @Override
     public int getCommentsCount() {
         return commentCount;
+    }
+
+    @Override
+    public int getPostIDCounter() {
+        return postIDCounter++;
     }
 
     @Override
@@ -84,14 +89,12 @@ public class UserClass implements User {
     }
 
     @Override
-    public int post(User user, PostKind stance, List<String> hashtags, String postContent) {
-        Post post = new PostClass(postIDCounter, user, stance, hashtags, postContent);
+    public void post(Post post) {
         postsMade.put(post.getPostID(), post);
         for (User friend:
                 friends.values()) {
             friend.receivePost(post);
         }
-        return postIDCounter++;
     }
 
     @Override

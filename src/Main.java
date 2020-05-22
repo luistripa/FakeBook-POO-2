@@ -335,20 +335,43 @@ public class Main {
 	}
 
 	private static void tryToProcessTopicFanatics(Scanner in, FakeBook fb) throws FanaticismNotFoundException {
-		// TODO
+		String topic = in.nextLine().trim();
+
+		Iterator<User> iter = fb.topicFanatics(topic);
+
+		while (iter.hasNext()) {
+			User u = iter.next();
+			if (iter.hasNext())
+				System.out.print(u.getID()+", ");
+			else
+				System.out.println(u.getID()+".");
+		}
 	}
 
 
 	private static void processTopicPosts(Scanner in, FakeBook fb) {
 		try {
 			tryToProcessTopicPosts(in, fb);
-		} catch (TopicNotFoundException e) {
+		} catch (InvalidNumberOfPostsToListException | TopicNotFoundException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessTopicPosts(Scanner in, FakeBook fb) throws TopicNotFoundException {
-		// TODO
+	private static void tryToProcessTopicPosts(Scanner in, FakeBook fb) throws InvalidNumberOfPostsToListException, TopicNotFoundException {
+		String topic = in.next();
+		int postNumber = in.nextInt();
+		in.nextLine();
+
+		if (postNumber < 1)
+			throw new InvalidNumberOfPostsToListException();
+
+		Iterator<Post> iter = fb.topicPosts(topic);
+
+		while (iter.hasNext() && postNumber != 0) {
+			Post p = iter.next();
+			System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getPostID(), p.getCommentCount(), p.getPostContent());
+			postNumber--;
+		}
 	}
 
 

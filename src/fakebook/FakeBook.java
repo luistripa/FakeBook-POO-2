@@ -39,4 +39,8 @@ public interface FakeBook {
     void comment(String userID, String authorID, int postID, CommentStance commentStance, String commentText) throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException; 
     
     Iterator<Comment> commentsByUser(String userID, String topic) throws NoCommentsException, UserDoesNotExistException;
+
+    Iterator<User> topicFanatics(String topic) throws FanaticismNotFoundException;
+
+    Iterator<Post> topicPosts(String topic) throws TopicNotFoundException;
 }

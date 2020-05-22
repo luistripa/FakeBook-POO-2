@@ -2,6 +2,8 @@ package fakebook;
 
 
 import comments.*;
+import comparators.ComparatorAlphabetical;
+import comparators.ComparatorByCommentsAuthorID;
 import exceptions.*;
 import posts.*;
 import users.*;
@@ -11,9 +13,13 @@ import java.util.*;
 public class FakeBookClass implements FakeBook {
 
     private final Map<String, User> users;
+    private final Map<String, SortedSet<User>> topicFanatics;
+    private final Map<String, List<Post>> topicPosts;
 
     public FakeBookClass() {
         users = new TreeMap<>();
+        topicFanatics = new HashMap<>();
+        topicPosts = new HashMap<>();
     }
 
     @Override
@@ -40,6 +46,22 @@ public class FakeBookClass implements FakeBook {
             throw new UserAlreadyExistsException(userID);
         user = new UserFanaticClass(userID, userKind, loves, hates);
         users.put(userID, user);
+
+        // Process loves fanaticisms
+        for (String fanaticism :
+                loves) {
+            if (!topicFanatics.containsKey(fanaticism))
+                topicFanatics.put(fanaticism, new TreeSet<>(new ComparatorAlphabetical()));
+            topicFanatics.get(fanaticism).add(user);
+        }
+
+        // Process hates fanaticisms
+        for (String fanaticism :
+                hates) {
+            if (!topicFanatics.containsKey(fanaticism))
+                topicFanatics.put(fanaticism, new TreeSet<>(new ComparatorAlphabetical()));
+            topicFanatics.get(fanaticism).add(user);
+        }
     }
 
     @Override
@@ -97,8 +119,21 @@ public class FakeBookClass implements FakeBook {
         else if (userKind == UserKind.FANATIC &&  !fanaticUserCanPost(user, hashtags, stance))
             throw new InadequateStanceException();
 
-        // Post to the user feed. This includes sending the posts to all his friends, if there is any. Returns the post ID
-        return user.post(user, stance, hashtags, postContent);
+        // Generate post object
+        Post post = new PostClass(user.getPostIDCounter(), user, stance, hashtags, postContent);
+
+        // Add the post to the topicPosts map
+        for (String topic :
+                hashtags) {
+            if (!topicPosts.containsKey(topic))
+                topicPosts.put(topic, new ArrayList<>());
+            topicPosts.get(topic).add(post);
+        }
+
+        // Post to the user feed. This includes sending the posts to all his friends, if there is any.
+        user.post(post);
+
+        return post.getPostID();
 
     }
 
@@ -199,6 +234,22 @@ public class FakeBookClass implements FakeBook {
     		throw new UserDoesNotExistException(userID);
     	}
     	return user.commentIterator(topic);
+    }
+
+    @Override
+    public Iterator<User> topicFanatics(String topic) throws FanaticismNotFoundException {
+        if (!topicFanatics.containsKey(topic))
+            throw new FanaticismNotFoundException(topic);
+        return topicFanatics.get(topic).iterator();
+    }
+
+    @Override
+    public Iterator<Post> topicPosts(String topic) throws TopicNotFoundException {
+        if (!topicPosts.containsKey(topic))
+            throw new TopicNotFoundException(topic);
+        List<Post> tp = topicPosts.get(topic);
+        tp.sort(new ComparatorByCommentsAuthorID());
+        return tp.iterator();
     }
 
     /* Private Methods */

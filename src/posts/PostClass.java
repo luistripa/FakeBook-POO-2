@@ -24,7 +24,7 @@ public class PostClass implements Post {
     }
 
     @Override
-    public int getPostID() {
+    public Integer getPostID() {
         return postID;
     }
 
@@ -39,7 +39,7 @@ public class PostClass implements Post {
     }
     
     @Override
-    public int getCommentCount() {
+    public Integer getCommentCount() {
     	return commentThread.size();
     }
 
