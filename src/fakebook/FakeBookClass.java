@@ -252,6 +252,28 @@ public class FakeBookClass implements FakeBook {
         return tp.iterator();
     }
 
+    @Override
+    public Post popularPost() throws NoUsersException, NoPostsException {
+    	if (users.size() == 0) {
+    		throw new NoUsersException();
+    	} else if (numberOfPosts() == 0) {
+    		throw new NoPostsException();
+    	} else {
+    		Iterator<User> it = userIterator();
+    		User popularUser = null;
+
+    		while (it.hasNext()) {
+    			User user = it.next();
+
+    			if (user.getPopularPost().getCommentCount() > popularUser.getPopularPost().getCommentCount()) {
+    				popularUser = user;
+    			}
+    		}
+    		return popularUser.getPopularPost();
+    	}	
+    }
+
+    
     /* Private Methods */
 
     private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind stance) {

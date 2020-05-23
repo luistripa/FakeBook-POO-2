@@ -134,4 +134,37 @@ public class UserClass implements User {
     	return listComments.iterator();
     }
 
+    @Override
+    public int maxCommentNumber() throws NoPostsException {
+    	if (getPostsCount() == 0) {
+    		throw new NoPostsException();
+    	} else {    	
+    	Iterator<Post> it = postsIterator();
+    	int maxCommentNumber = 0;
+    	while (it.hasNext()) {
+    		Post post = it.next();
+    		if (post.getCommentCount() > maxCommentNumber) {
+    			maxCommentNumber = post.getCommentCount();
+    		}
+    	}
+    	return maxCommentNumber;
+    	}
+    }
+    
+    @Override
+    public Post getPopularPost() throws NoPostsException {
+    	if (getPostsCount() == 0) {
+    		throw new NoPostsException();
+    	} else {
+    		Iterator<Post> it = postsIterator();
+    		Post popularPost = null;
+    		while (it.hasNext()) {
+    			Post post = it.next();
+    			if (post.getCommentCount() == maxCommentNumber()) {
+    				popularPost = post;
+    			}
+    		}
+    		return popularPost;
+    	}
+    }
 }

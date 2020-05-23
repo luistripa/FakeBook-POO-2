@@ -77,7 +77,7 @@ public class Main {
 				processTopicPosts(in, fb);
 				break;
 			case POPULARPOST:
-				processPopularPost(in, fb);
+				processPopularPost(fb);
 				break;
 			case TOPPOSTER:
 				processTopPoster(in, fb);
@@ -373,18 +373,20 @@ public class Main {
 			postNumber--;
 		}
 	}
-
-
-	private static void processPopularPost(Scanner in, FakeBook fb) {
+	
+	private static void processPopularPost(FakeBook fb) {
 		try {
-			tryToProcessPopularPost(in, fb);
+			tryToProcessPopularPost(fb);
 		} catch (NoPostsException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessPopularPost(Scanner in, FakeBook fb) throws NoPostsException {
-		// TODO
+	private static void tryToProcessPopularPost(FakeBook fb) throws NoPostsException {
+		if (numberOfPosts == 0)
+			throw new NoPostsException();
+		Post p = fb.popularPost();
+		System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getPostID(), p.getCommentCount(), p.getPostContent());
 	}
 
 
