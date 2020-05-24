@@ -13,8 +13,11 @@ import java.util.*;
 public class FakeBookClass implements FakeBook {
 
     private final Map<String, User> users;
+    private int postCount;
     private final Map<String, SortedSet<User>> topicFanatics;
     private final Map<String, List<Post>> topicPosts;
+    private Post popularPost;
+
 
     public FakeBookClass() {
         users = new TreeMap<>();
@@ -133,6 +136,8 @@ public class FakeBookClass implements FakeBook {
         // Post to the user feed. This includes sending the posts to all his friends, if there is any.
         user.post(post);
 
+        postCount++;
+
         return post.getPostID();
 
     }
@@ -224,6 +229,9 @@ public class FakeBookClass implements FakeBook {
         Comment comment = new CommentClass(user, post, commentStance, commentText);
         user.comment(post.getHashtags(), comment);
         post.comment(comment);
+
+        updatePopularPost(post);
+
     }
 
     @Override
@@ -253,24 +261,12 @@ public class FakeBookClass implements FakeBook {
     }
 
     @Override
-    public Post popularPost() throws NoUsersException, NoPostsException {
-    	if (users.size() == 0) {
-    		throw new NoUsersException();
-    	} else if (numberOfPosts() == 0) {
-    		throw new NoPostsException();
-    	} else {
-    		Iterator<User> it = userIterator();
-    		User popularUser = null;
+    public Post popularPost() throws NoPostsException {
+    	if (popularPost == null) {
+            throw new NoPostsException();
+        }
 
-    		while (it.hasNext()) {
-    			User user = it.next();
-
-    			if (user.getPopularPost().getCommentCount() > popularUser.getPopularPost().getCommentCount()) {
-    				popularUser = user;
-    			}
-    		}
-    		return popularUser.getPopularPost();
-    	}	
+    	return popularPost;
     }
 
     
@@ -308,6 +304,24 @@ public class FakeBookClass implements FakeBook {
                     return commentStance == CommentStance.NEGATIVE;
         }
         return true;
+    }
+
+    private void updatePopularPost(Post post) {
+        if (popularPost == null)
+            popularPost = post;
+        else {
+            int compComments = popularPost.getCommentCount().compareTo(post.getCommentCount());
+
+            if (compComments == 0) {
+                int compAuthor = popularPost.getAuthor().getID().compareTo(post.getAuthor().getID());
+                if (compAuthor == 0) {
+                    if (popularPost.getPostID() < post.getPostID())
+                        popularPost = post;
+                } else if (compAuthor > 0)
+                    popularPost = post;
+            } else if (compComments < 0)
+                popularPost = post;
+        }
     }
     
 }

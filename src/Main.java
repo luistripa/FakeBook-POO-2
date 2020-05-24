@@ -383,8 +383,6 @@ public class Main {
 	}
 
 	private static void tryToProcessPopularPost(FakeBook fb) throws NoPostsException {
-		if (numberOfPosts == 0)
-			throw new NoPostsException();
 		Post p = fb.popularPost();
 		System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getPostID(), p.getCommentCount(), p.getPostContent());
 	}

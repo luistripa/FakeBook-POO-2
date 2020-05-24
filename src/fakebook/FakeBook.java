@@ -44,5 +44,5 @@ public interface FakeBook {
 
     Iterator<Post> topicPosts(String topic) throws TopicNotFoundException;
 
-	Post popularPost() throws NoUsersException, NoPostsException;
+	Post popularPost() throws NoPostsException;
 }
