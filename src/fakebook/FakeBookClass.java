@@ -17,7 +17,7 @@ public class FakeBookClass implements FakeBook {
     private final Map<String, SortedSet<User>> topicFanatics;
     private final Map<String, List<Post>> topicPosts;
     private Post popularPost;
-
+    private User topPoster;
 
     public FakeBookClass() {
         users = new TreeMap<>();
@@ -137,7 +137,9 @@ public class FakeBookClass implements FakeBook {
         user.post(post);
 
         postCount++;
-
+        
+        updateTopPoster(user);
+        
         return post.getPostID();
 
     }
@@ -231,6 +233,7 @@ public class FakeBookClass implements FakeBook {
         post.comment(comment);
 
         updatePopularPost(post);
+        updateTopPoster(user);
 
     }
 
@@ -268,7 +271,15 @@ public class FakeBookClass implements FakeBook {
 
     	return popularPost;
     }
-
+    
+    @Override
+    public User topPoster() throws NoTopPosterException {
+    	if (popularPost == null) {
+    		throw new NoTopPosterException();
+    	}
+    	
+    	return topPoster;
+    }
     
     /* Private Methods */
 
@@ -324,4 +335,26 @@ public class FakeBookClass implements FakeBook {
         }
     }
     
-}
+    private void updateTopPoster(User user) {
+    	if (topPoster == null)
+    		topPoster = user;
+    	else {
+    		boolean compPosts = (topPoster.getPostsCount() == (user.getPostsCount()));
+
+    		if (compPosts == true) {
+    			boolean compComments = (topPoster.getCommentsCount() == (user.getCommentsCount()));
+    			if (compComments == true) {
+    				int compAuthor = topPoster.getID().compareTo(user.getID());
+    				if(compAuthor > 0)
+    					topPoster = user;
+    			} else if (topPoster.getCommentsCount() < (user.getCommentsCount()))
+    				topPoster = user;
+    		} else if (topPoster.getPostsCount() < (user.getPostsCount()))
+    			topPoster = user;
+    	}
+
+    }
+    	
+ }
+    
+

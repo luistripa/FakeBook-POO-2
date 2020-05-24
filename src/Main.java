@@ -80,7 +80,7 @@ public class Main {
 				processPopularPost(fb);
 				break;
 			case TOPPOSTER:
-				processTopPoster(in, fb);
+				processTopPoster(fb);
 				break;
 			case RESPONSIVE:
 				processResponsive(in, fb);
@@ -388,16 +388,17 @@ public class Main {
 	}
 
 
-	private static void processTopPoster(Scanner in, FakeBook fb) {
+	private static void processTopPoster(FakeBook fb) {
 		try {
-			tryToProcessTopPoster(in, fb);
+			tryToProcessTopPoster(fb);
 		} catch (NoTopPosterException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessTopPoster(Scanner in, FakeBook fb) throws NoTopPosterException {
-		// TODO
+	private static void tryToProcessTopPoster(FakeBook fb) throws NoTopPosterException {
+		User u = fb.topPoster();
+		System.out.printf("%s %d %d.\n", u.getID(), u.getPostsCount(), u.getCommentsCount());
 	}
 
 
