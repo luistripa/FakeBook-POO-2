@@ -21,7 +21,12 @@ public class CommentClass implements Comment {
     public User getAuthor() {
         return author;
     }
-    
+
+    @Override
+    public Post getPost() {
+        return post;
+    }
+
     @Override
     public CommentStance getStance() {
         return stance;

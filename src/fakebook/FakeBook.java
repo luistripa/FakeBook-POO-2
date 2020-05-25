@@ -49,4 +49,6 @@ public interface FakeBook {
 	User topPoster() throws NoTopPosterException;
 
 	User shameless() throws NoShamelessPostsException;
+
+    User responsive() throws NoResponsivePostsException;
 }

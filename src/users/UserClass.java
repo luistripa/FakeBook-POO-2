@@ -1,8 +1,10 @@
 package users;
 
 import comments.Comment;
+import comments.CommentStance;
 import exceptions.*;
 import posts.Post;
+import posts.PostKind;
 
 import java.util.*;
 
@@ -16,7 +18,11 @@ public class UserClass implements User {
     private Map<String, List<Comment>> topics;
     private int commentCount;
     private int postIDCounter;
-    private int numberOfLies;
+    private Map<Post, Boolean> postRead;
+    private Integer readPostNumber;
+    private Integer numberOfLies;
+
+
 
     public UserClass(String ID, UserKind userKind) {
         this.ID = ID;
@@ -27,6 +33,8 @@ public class UserClass implements User {
         topics = new HashMap<>();
         commentCount = 0;
         postIDCounter = 1;
+        this.postRead = new HashMap<>();
+        readPostNumber = 0;
         numberOfLies = 0;
     }
 
@@ -46,7 +54,7 @@ public class UserClass implements User {
     }
 
     @Override
-    public int getPostsCount() {
+    public Integer getPostsCount() {
         return postsMade.size();
     }
 
@@ -61,9 +69,24 @@ public class UserClass implements User {
     }
 
     @Override
-    public int getNumberOfLies() {
-		return numberOfLies;
-	}
+    public int getReadPostNumber() {
+        return readPostNumber;
+    }
+
+    @Override
+    public Integer getTotalAccessiblePosts() {
+        return postsMade.size() + postsReceived.size();
+    }
+
+    @Override
+    public Double getResponsiveness() {
+        return (double) readPostNumber / getTotalAccessiblePosts();
+    }
+
+    @Override
+    public Integer getNumberOfLies() {
+        return numberOfLies;
+    }
     
     @Override
     public void addFriend(User user) throws UsersAreAlreadyFriendsException {
@@ -101,11 +124,15 @@ public class UserClass implements User {
                 friends.values()) {
             friend.receivePost(post);
         }
+        postRead.put(post, false);
+        if (post.getKind() == PostKind.FAKE)
+            numberOfLies++;
     }
 
     @Override
     public void receivePost(Post post) {
         postsReceived.add(post);
+        postRead.put(post, false);
     }
 
     @Override
@@ -127,6 +154,16 @@ public class UserClass implements User {
             topics.get(hashtag).add(comment);
         }
         commentCount++;
+
+        if (!postRead.get(comment.getPost())) {
+            postRead.put(comment.getPost(), true);
+            incPostsRead();
+        }
+
+        Post post = comment.getPost();
+
+        if ( (post.getKind() == PostKind.FAKE && comment.getStance() == CommentStance.POSITIVE) || (post.getKind() == PostKind.HONEST && comment.getStance() == CommentStance.NEGATIVE) )
+            numberOfLies++;
     }
 
     @Override
@@ -140,8 +177,11 @@ public class UserClass implements User {
     	return listComments.iterator();
     }
     
-    @Override
-    public void incNumberOfLies() {
-    	numberOfLies++;    	
+
+
+    /* Private Methods */
+
+    private void incPostsRead() {
+        readPostNumber++;
     }
 }

@@ -16,12 +16,14 @@ public class FakeBookClass implements FakeBook {
     private final Map<String, List<Post>> topicPosts;
     private Post popularPost;
     private User topPoster;
-    private User shameless;
+    private User responsive;
+    private final List<User> shameless;
 
     public FakeBookClass() {
         users = new TreeMap<>();
         topicFanatics = new HashMap<>();
         topicPosts = new HashMap<>();
+        shameless = new ArrayList<>();
     }
 
     @Override
@@ -135,11 +137,10 @@ public class FakeBookClass implements FakeBook {
         user.post(post);
 
         updateTopPoster(user);
-        
-        if (post.getKind() == PostKind.FAKE)
-        	user.incNumberOfLies();
-        
-        updateShameless(user);
+
+        if (post.getKind() == PostKind.FAKE) {
+            shameless.add(user);
+        }
         
         return post.getPostID();
     }
@@ -231,14 +232,14 @@ public class FakeBookClass implements FakeBook {
         Comment comment = new CommentClass(user, post, commentStance, commentText);
         user.comment(post.getHashtags(), comment);
         post.comment(comment);
-        
-        if ((post.getKind() == PostKind.FAKE && comment.getStance() == CommentStance.NEGATIVE) || post.getKind() == PostKind.HONEST && comment.getStance() == CommentStance.NEGATIVE) {
-        	user.incNumberOfLies();
+
+        if ((post.getKind() == PostKind.FAKE && comment.getStance() == CommentStance.POSITIVE) || (post.getKind() == PostKind.HONEST && comment.getStance() == CommentStance.NEGATIVE)) {
+        	shameless.add(user);
         }
 
         updatePopularPost(post);
         updateTopPoster(user);
-        updateShameless(user);
+        updateResponsive(user);
     }
 
     @Override
@@ -289,14 +290,30 @@ public class FakeBookClass implements FakeBook {
     
     @Override
     public User shameless() throws NoShamelessPostsException {
-    	if (popularPost == null) {
+
+    	if (shameless.size() == 0) {
     		throw new NoShamelessPostsException();
     	}
-    	
-    	return shameless;
+
+    	shameless.sort(new ComparatorByLiesPostsID());
+
+        //System.out.println(shameless.get(0).getNumberOfLies());
+        //System.out.println(shameless.get(0).getTotalAccessiblePosts());
+
+    	return shameless.get(0);
+
     }
-    
-    
+
+    @Override
+    public User responsive() throws NoResponsivePostsException {
+        if (responsive == null) {
+            throw new NoResponsivePostsException();
+        }
+
+        return responsive;
+    }
+
+
     /* Private Methods */
 
     private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind stance) {
@@ -350,7 +367,7 @@ public class FakeBookClass implements FakeBook {
                 popularPost = post;
         }
     }
-    
+
     private void updateTopPoster(User user) {
     	if (topPoster == null)
     		topPoster = user;
@@ -370,24 +387,21 @@ public class FakeBookClass implements FakeBook {
     	}
 
     }
-    
-    private void updateShameless(User user) {
-    	if (shameless == null)
-    		shameless = user;
-    	else {
-    		boolean compLies = (shameless.getNumberOfLies() == (user.getNumberOfLies()));
 
-    		if (compLies) {
-    			boolean compPosts = (shameless.getPostsCount() == (user.getPostsCount()));
-    			if (compPosts) {
-    				boolean compComments = (shameless.getCommentsCount() == (user.getCommentsCount()));
-    				if (shameless.getCommentsCount() < (user.getCommentsCount()))
-    					shameless = user;
-    			} else if (shameless.getPostsCount() < (user.getPostsCount())) 
-					shameless = user;
-    		} else if (shameless.getNumberOfLies() < (user.getNumberOfLies()))
-				shameless = user;
-    	}	
+    private void updateResponsive(User user) {
+        if (responsive == null)
+            responsive = user;
+        else {
+            boolean compResponsiveness = responsive.getResponsiveness() == user.getResponsiveness();
+
+            if (compResponsiveness) {
+                int compID = responsive.getID().compareTo(user.getID());
+                if (compID > 0)
+                    responsive = user;
+
+            } else if (responsive.getResponsiveness() < user.getResponsiveness())
+                responsive = user;
+        }
     }
     
 }

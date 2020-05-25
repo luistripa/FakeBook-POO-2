@@ -83,7 +83,7 @@ public class Main {
 				processTopPoster(fb);
 				break;
 			case RESPONSIVE:
-				processResponsive(in, fb);
+				processResponsive(fb);
 				break;
 			case SHAMELESS:
 				processShameless(fb);
@@ -402,16 +402,17 @@ public class Main {
 	}
 
 
-	private static void processResponsive(Scanner in, FakeBook fb) {
+	private static void processResponsive(FakeBook fb) {
 		try {
-			tryToProcessResponsive(in, fb);
+			tryToProcessResponsive(fb);
 		} catch (NoResponsivePostsException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessResponsive(Scanner in, FakeBook fb) throws NoResponsivePostsException {
-		// TODO
+	private static void tryToProcessResponsive(FakeBook fb) throws NoResponsivePostsException {
+		User u = fb.responsive();
+		System.out.printf("%s %d %d.\n", u.getID(), u.getReadPostNumber(), u.getTotalAccessiblePosts());
 	}
 
 	private static void processShameless(FakeBook fb) {

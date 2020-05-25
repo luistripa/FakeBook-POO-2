@@ -15,11 +15,17 @@ public interface User {
 
     int getFriendCount();
 
-    int getPostsCount();
+    Integer getPostsCount();
 
     int getCommentsCount();
 
     int getPostIDCounter();
+
+    int getReadPostNumber();
+
+    Integer getTotalAccessiblePosts();
+
+    Double getResponsiveness();
 
     void addFriend(User user) throws UsersAreAlreadyFriendsException;
 
@@ -39,7 +45,5 @@ public interface User {
     
     Iterator<Comment> commentIterator(String topic) throws NoCommentsException;
 
-	int getNumberOfLies();
-
-	void incNumberOfLies();
+	Integer getNumberOfLies();
 }
