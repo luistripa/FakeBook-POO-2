@@ -16,6 +16,7 @@ public class UserClass implements User {
     private Map<String, List<Comment>> topics;
     private int commentCount;
     private int postIDCounter;
+    private int numberOfLies;
 
     public UserClass(String ID, UserKind userKind) {
         this.ID = ID;
@@ -26,6 +27,7 @@ public class UserClass implements User {
         topics = new HashMap<>();
         commentCount = 0;
         postIDCounter = 1;
+        numberOfLies = 0;
     }
 
     @Override
@@ -58,6 +60,11 @@ public class UserClass implements User {
         return postIDCounter++;
     }
 
+    @Override
+    public int getNumberOfLies() {
+		return numberOfLies;
+	}
+    
     @Override
     public void addFriend(User user) throws UsersAreAlreadyFriendsException {
         if (friends.containsKey(user.getID()))
@@ -131,5 +138,10 @@ public class UserClass implements User {
     	if (listComments == null)
     	    throw new NoCommentsException();
     	return listComments.iterator();
+    }
+    
+    @Override
+    public void incNumberOfLies() {
+    	numberOfLies++;    	
     }
 }

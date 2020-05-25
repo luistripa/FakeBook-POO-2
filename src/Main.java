@@ -86,7 +86,7 @@ public class Main {
 				processResponsive(in, fb);
 				break;
 			case SHAMELESS:
-				processShameless(in, fb);
+				processShameless(fb);
 				break;
 			case HELP:
 				processHelp();
@@ -414,16 +414,17 @@ public class Main {
 		// TODO
 	}
 
-	private static void processShameless(Scanner in, FakeBook fb) {
+	private static void processShameless(FakeBook fb) {
 		try {
-			tryToProcessShameless(in, fb);
+			tryToProcessShameless(fb);
 		} catch (NoShamelessPostsException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
-	private static void tryToProcessShameless(Scanner in, FakeBook fb) throws NoShamelessPostsException {
-		// TODO
+	private static void tryToProcessShameless(FakeBook fb) throws NoShamelessPostsException {
+		User u = fb.shameless();
+		System.out.printf("%s %d.\n", u.getID(), u.getNumberOfLies());
 	}
 
 

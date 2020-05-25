@@ -16,6 +16,7 @@ public class FakeBookClass implements FakeBook {
     private final Map<String, List<Post>> topicPosts;
     private Post popularPost;
     private User topPoster;
+    private User shameless;
 
     public FakeBookClass() {
         users = new TreeMap<>();
@@ -135,6 +136,11 @@ public class FakeBookClass implements FakeBook {
 
         updateTopPoster(user);
         
+        if (post.getKind() == PostKind.FAKE)
+        	user.incNumberOfLies();
+        
+        updateShameless(user);
+        
         return post.getPostID();
     }
 
@@ -225,9 +231,14 @@ public class FakeBookClass implements FakeBook {
         Comment comment = new CommentClass(user, post, commentStance, commentText);
         user.comment(post.getHashtags(), comment);
         post.comment(comment);
+        
+        if ((post.getKind() == PostKind.FAKE && comment.getStance() == CommentStance.NEGATIVE) || post.getKind() == PostKind.HONEST && comment.getStance() == CommentStance.NEGATIVE) {
+        	user.incNumberOfLies();
+        }
 
         updatePopularPost(post);
         updateTopPoster(user);
+        updateShameless(user);
     }
 
     @Override
@@ -273,6 +284,18 @@ public class FakeBookClass implements FakeBook {
     	
     	return topPoster;
     }
+    
+    
+    
+    @Override
+    public User shameless() throws NoShamelessPostsException {
+    	if (popularPost == null) {
+    		throw new NoShamelessPostsException();
+    	}
+    	
+    	return shameless;
+    }
+    
     
     /* Private Methods */
 
@@ -347,7 +370,25 @@ public class FakeBookClass implements FakeBook {
     	}
 
     }
-    	
- }
     
+    private void updateShameless(User user) {
+    	if (shameless == null)
+    		shameless = user;
+    	else {
+    		boolean compLies = (shameless.getNumberOfLies() == (user.getNumberOfLies()));
 
+    		if (compLies) {
+    			boolean compPosts = (shameless.getPostsCount() == (user.getPostsCount()));
+    			if (compPosts) {
+    				boolean compComments = (shameless.getCommentsCount() == (user.getCommentsCount()));
+    				if (shameless.getCommentsCount() < (user.getCommentsCount()))
+    					shameless = user;
+    			} else if (shameless.getPostsCount() < (user.getPostsCount())) 
+					shameless = user;
+    		} else if (shameless.getNumberOfLies() < (user.getNumberOfLies()))
+				shameless = user;
+    	}	
+    }
+    
+}
+    

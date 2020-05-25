@@ -38,4 +38,8 @@ public interface User {
     void comment(List<String> hashtags, Comment comment);
     
     Iterator<Comment> commentIterator(String topic) throws NoCommentsException;
+
+	int getNumberOfLies();
+
+	void incNumberOfLies();
 }
