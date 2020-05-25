@@ -3,7 +3,6 @@ package users;
 import comments.Comment;
 import exceptions.*;
 import posts.Post;
-import posts.*;
 
 import java.util.*;
 

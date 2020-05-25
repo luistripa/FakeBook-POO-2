@@ -2,8 +2,7 @@ package fakebook;
 
 
 import comments.*;
-import comparators.ComparatorAlphabetical;
-import comparators.ComparatorByCommentsAuthorID;
+import comparators.*;
 import exceptions.*;
 import posts.*;
 import users.*;
@@ -13,7 +12,6 @@ import java.util.*;
 public class FakeBookClass implements FakeBook {
 
     private final Map<String, User> users;
-    private int postCount;
     private final Map<String, SortedSet<User>> topicFanatics;
     private final Map<String, List<Post>> topicPosts;
     private Post popularPost;
@@ -136,12 +134,9 @@ public class FakeBookClass implements FakeBook {
         // Post to the user feed. This includes sending the posts to all his friends, if there is any.
         user.post(post);
 
-        postCount++;
-        
         updateTopPoster(user);
         
         return post.getPostID();
-
     }
 
     @Override
@@ -234,7 +229,6 @@ public class FakeBookClass implements FakeBook {
 
         updatePopularPost(post);
         updateTopPoster(user);
-
     }
 
     @Override
@@ -274,7 +268,7 @@ public class FakeBookClass implements FakeBook {
     
     @Override
     public User topPoster() throws NoTopPosterException {
-    	if (popularPost == null) {
+    	if (topPoster == null) {
     		throw new NoTopPosterException();
     	}
     	
@@ -341,9 +335,9 @@ public class FakeBookClass implements FakeBook {
     	else {
     		boolean compPosts = (topPoster.getPostsCount() == (user.getPostsCount()));
 
-    		if (compPosts == true) {
+    		if (compPosts) {
     			boolean compComments = (topPoster.getCommentsCount() == (user.getCommentsCount()));
-    			if (compComments == true) {
+    			if (compComments) {
     				int compAuthor = topPoster.getID().compareTo(user.getID());
     				if(compAuthor > 0)
     					topPoster = user;

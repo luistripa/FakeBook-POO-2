@@ -1,6 +1,6 @@
 from os import system
 
-NUMBER_OF_TESTS = 16
+NUMBER_OF_TESTS = 20
 
 system("cd src/ ; javac -Xlint -d ../bin/production/FakeBook Main.java ; cd ..")
 

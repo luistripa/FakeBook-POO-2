@@ -1,13 +1,8 @@
 package users;
 
 import comments.Comment;
-import exceptions.NoCommentsException;
-import exceptions.NoPostsException;
-import exceptions.UserHasNoFriendsException;
-import exceptions.UserHasNoPostsException;
-import exceptions.UsersAreAlreadyFriendsException;
+import exceptions.*;
 import posts.Post;
-import posts.PostKind;
 
 import java.util.Iterator;
 import java.util.List;
