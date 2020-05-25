@@ -67,8 +67,7 @@ public class FakeBookClass implements FakeBook {
 
     @Override
     public Iterator<User> userIterator() throws NoUsersException {
-        List<User> list = new ArrayList<>(users.values());
-        Iterator<User> iter = list.iterator();
+        Iterator<User> iter = users.values().iterator();
 
         if (iter.hasNext())
             return iter;
