@@ -8,6 +8,11 @@ import posts.PostKind;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public class UserClass implements User {
 
     private String ID;
@@ -21,8 +26,6 @@ public class UserClass implements User {
     private Map<Post, Boolean> postRead;
     private Integer readPostNumber;
     private Integer numberOfLies;
-
-
 
     public UserClass(String ID, UserKind userKind) {
         this.ID = ID;
@@ -178,9 +181,11 @@ public class UserClass implements User {
     }
     
 
-
     /* Private Methods */
 
+    /**
+     * This method increments the number of read posts.
+     */
     private void incPostsRead() {
         readPostNumber++;
     }

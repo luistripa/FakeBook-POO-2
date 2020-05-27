@@ -3,6 +3,11 @@ package comments;
 import users.User;
 import posts.Post;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public class CommentClass implements Comment {
 
     private final User author;

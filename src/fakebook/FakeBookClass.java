@@ -9,6 +9,11 @@ import users.*;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public class FakeBookClass implements FakeBook {
 
     private final Map<String, User> users;
@@ -316,6 +321,13 @@ public class FakeBookClass implements FakeBook {
 
     /* Private Methods */
 
+    /**
+     * 
+     * @param user
+     * @param hashtags
+     * @param stance
+     * @return
+     */
     private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind stance) {
         UserFanatic userFanatic;
         userFanatic = (UserFanatic) user;
@@ -330,6 +342,14 @@ public class FakeBookClass implements FakeBook {
         return true;
     }
 
+    /**
+     * 
+     * @param user
+     * @param hashtags
+     * @param postStance
+     * @param commentStance
+     * @return
+     */
     private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind postStance, CommentStance commentStance) {
         UserFanatic userFanatic;
         userFanatic = (UserFanatic) user;
@@ -349,7 +369,11 @@ public class FakeBookClass implements FakeBook {
         }
         return true;
     }
-
+    
+    /**
+     * Method that updates the most popular post.
+     * @param post
+     */
     private void updatePopularPost(Post post) {
         if (popularPost == null)
             popularPost = post;
@@ -368,6 +392,10 @@ public class FakeBookClass implements FakeBook {
         }
     }
 
+    /**
+     * Method that updates the top poster.
+     * @param user
+     */
     private void updateTopPoster(User user) {
     	if (topPoster == null)
     		topPoster = user;
@@ -388,6 +416,10 @@ public class FakeBookClass implements FakeBook {
 
     }
 
+    /**
+     * Method that updates the most responsive user.
+     * @param user
+     */
     private void updateResponsive(User user) {
         if (responsive == null)
             responsive = user;

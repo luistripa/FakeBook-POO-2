@@ -2,6 +2,11 @@ package users;
 
 import java.util.List;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public class UserFanaticClass extends UserClass implements UserFanatic {
 
     List<String> loves;

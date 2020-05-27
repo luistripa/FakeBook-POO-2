@@ -1,5 +1,10 @@
 package enums;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public enum Commands {
 
     REGISTER(),

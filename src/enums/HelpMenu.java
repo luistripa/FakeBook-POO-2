@@ -1,5 +1,10 @@
 package enums;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public enum HelpMenu {
     REGISTER("register - registers a new user"),
     USERS("users - lists all users"),
@@ -19,13 +24,21 @@ public enum HelpMenu {
     HELP("help - shows the available commands"),
     EXIT("exit - terminates the execution of the program");
 
+	//HelpMenu variables
     private final String message;
 
+    /**
+	 * HelpMenu constructor.
+	 * @param message
+	 */
     HelpMenu(String message) {
         this.message = message;
     }
 
-
+    /**
+	 * Getter method for the message.
+	 * @return message
+	 */
     public String getMessage() {
         return message;
     }

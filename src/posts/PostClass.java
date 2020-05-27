@@ -5,6 +5,11 @@ import users.User;
 
 import java.util.*;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public class PostClass implements Post {
 
     private int postID;

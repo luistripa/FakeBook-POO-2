@@ -4,6 +4,11 @@ import users.User;
 
 import java.util.Comparator;
 
+/**
+ * 
+ * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ */
 public class ComparatorByLiesPostsID implements Comparator<User> {
 
     @Override
