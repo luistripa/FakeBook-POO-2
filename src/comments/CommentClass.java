@@ -5,7 +5,8 @@ import posts.Post;
 
 /**
  * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class CommentClass implements Comment {
@@ -43,8 +44,8 @@ public class CommentClass implements Comment {
     }
     
     @Override
-    public int getPostID() {
-    	return post.getPostID();
+    public int getID() {
+    	return post.getID();
     }
     
     @Override

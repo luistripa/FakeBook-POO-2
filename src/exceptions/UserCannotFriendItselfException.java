@@ -1,8 +1,10 @@
 package exceptions;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * Exception thrown if a user attempted to friend itself
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class UserCannotFriendItselfException extends Exception {

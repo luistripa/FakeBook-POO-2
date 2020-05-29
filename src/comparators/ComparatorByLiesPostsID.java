@@ -5,8 +5,10 @@ import users.User;
 import java.util.Comparator;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * A comparator that sorts by reversed number of user lies (descendent), followed by number of posts, followed by user ID
+ *
+ * @author Luis Tripa
+ * @author Raquel Melo 57706
  *
  */
 public class ComparatorByLiesPostsID implements Comparator<User> {

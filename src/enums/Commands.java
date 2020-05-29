@@ -1,31 +1,48 @@
 package enums;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * An enum containing all available commands and their description.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public enum Commands {
+    REGISTER("register - registers a new user"),
+    USERS("users - lists all users"),
+    ADDFRIEND("addfriend - adds a new friend"),
+    FRIENDS("friends - lists the user friends"),
+    POST("post - posts a new message"),
+    USERPOSTS("userposts - lists all posts by a user"),
+    COMMENT("comment - user comments on a post"),
+    READPOST("readpost - prints detailed info on a post"),
+    COMMENTSBYUSER("commentsbyuser - shows all the comments by a user on a given post"),
+    TOPICFANATICS("topicfanatics - shows a list of fanatic users on a topic"),
+    TOPICPOSTS("topicposts - shows a list of posts on a given topic"),
+    POPULARPOST("popularpost - shows the most commented post"),
+    TOPPOSTER("topposter - shows the user with more posts"),
+    RESPONSIVE("responsive - shows the user with a higher percentage of commented posts"),
+    SHAMELESS("shameless - shows the top liars"),
+    HELP("help - shows the available commands"),
+    EXIT("exit - terminates the execution of the program"),
+    UNKNOWN("Unknown command. Type help to see available commands.");
 
-    REGISTER(),
-    USERS(),
-    ADDFRIEND(),
-    FRIENDS(),
-    POST(),
-    USERPOSTS(),
-    COMMENT(),
-    READPOST(),
-    COMMENTSBYUSER(),
-    TOPICFANATICS(),
-    TOPICPOSTS(),
-    POPULARPOST(),
-    TOPPOSTER(),
-    RESPONSIVE(),
-    SHAMELESS(),
-    HELP(),
-    EXIT(),
-    UNKNOWN();
+	//HelpMenu variables
+    private final String message;
 
-    Commands() {}
+    /**
+	 * HelpMenu constructor.
+	 * @param message
+	 */
+    Commands(String message) {
+        this.message = message;
+    }
 
+    /**
+	 * Getter method for the message.
+	 * @return message
+	 */
+    public String getMessage() {
+        return message;
+    }
 }

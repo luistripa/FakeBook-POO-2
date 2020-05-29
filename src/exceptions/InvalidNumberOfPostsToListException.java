@@ -1,8 +1,10 @@
 package exceptions;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * Exception thrown if the number of posts to list is less than 1.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class InvalidNumberOfPostsToListException extends Exception {

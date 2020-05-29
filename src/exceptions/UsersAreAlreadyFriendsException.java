@@ -1,8 +1,10 @@
 package exceptions;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * Exception thrown if both users are already friends.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class UsersAreAlreadyFriendsException extends Exception {

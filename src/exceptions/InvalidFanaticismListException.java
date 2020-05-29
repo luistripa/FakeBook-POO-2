@@ -1,8 +1,10 @@
 package exceptions;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * Exception thrown if the list of fanaticisms is invalid (repeated or contradicting elements).
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class InvalidFanaticismListException extends Exception {

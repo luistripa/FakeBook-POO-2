@@ -1,15 +1,17 @@
 package exceptions;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * Exception thrown if there are no responsive users.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
-public class NoResponsivePostsException extends Exception {
+public class NoResponsiveUsersException extends Exception {
 
     public static final long serialVersionUID = 1L;
 
-    public NoResponsivePostsException() {
+    public NoResponsiveUsersException() {
         super("Social distancing has reached fakebook. Post something and then comment your own post to become the king of responsiveness.");
     }
 }

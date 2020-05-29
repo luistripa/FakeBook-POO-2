@@ -1,8 +1,9 @@
 package users;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * An enumerator listing all kinds of users.
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public enum UserKind {
@@ -17,7 +18,8 @@ public enum UserKind {
 
     /**
 	 * UserKind constructor.
-	 * @param userKind
+     *
+	 * @param userKind The user kind identifier.
 	 */
     UserKind(String userKind) {
         this.userKind = userKind;
@@ -25,7 +27,8 @@ public enum UserKind {
 
     /**
 	 * Getter method for the string.
-	 * @return userKind
+     *
+	 * @return The respective userKind ID
 	 */
     public String getString() {
         return userKind;

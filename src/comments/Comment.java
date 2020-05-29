@@ -5,7 +5,8 @@ import users.User;
 
 /**
  * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public interface Comment {
@@ -38,7 +39,7 @@ public interface Comment {
 	 * Getter method for the ID of the post to which the comment belongs.
 	 * @return postID.
 	 */
-	int getPostID();
+	int getID();
 	
 	/**
 	 * Getter method for the kind of the post where the comment is.

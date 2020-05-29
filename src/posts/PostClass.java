@@ -6,20 +6,20 @@ import users.User;
 import java.util.*;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
  *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  */
 public class PostClass implements Post {
 
-    private int postID;
-    private User author;
-    private PostKind kind;
-    private List<String> hashtags;
-    private List<Comment> commentThread;
-    private String postContent;
+    private final Integer postID;
+    private final User author;
+    private final PostKind kind;
+    private final List<String> hashtags;
+    private final List<Comment> commentThread;
+    private final String postContent;
 
-    public PostClass(int postID, User author, PostKind kind, List<String> hashtags, String postContent) {
+    public PostClass(Integer postID, User author, PostKind kind, List<String> hashtags, String postContent) {
         this.postID = postID;
         this.author = author;
         this.kind = kind;
@@ -29,7 +29,7 @@ public class PostClass implements Post {
     }
 
     @Override
-    public Integer getPostID() {
+    public Integer getID() {
         return postID;
     }
 
@@ -59,7 +59,7 @@ public class PostClass implements Post {
     }
 
     @Override
-    public String getPostContent() {
+    public String getContent() {
         return postContent;
     }
 

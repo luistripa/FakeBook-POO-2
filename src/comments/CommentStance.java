@@ -1,8 +1,10 @@
 package comments;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * Enumerator that defines the stance of a comment.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public enum CommentStance {
@@ -10,12 +12,11 @@ public enum CommentStance {
     POSITIVE("positive"),
     NEGATIVE("negative");
 
-	//CommentStance variables
-    private String string;
+    private final String string;
 
     /**
 	 * CommentStance constructor.
-	 * @param string
+	 * @param string The string that identifies the stance. This is only used for output purposes only.
 	 */
     CommentStance(String string) {
         this.string = string;

@@ -9,21 +9,22 @@ import posts.PostKind;
 import java.util.*;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class UserClass implements User {
 
-    private String ID;
-    private UserKind userKind;
-    private Map<String, User> friends;
-    private Map<Integer, Post> postsMade;
-    private List<Post> postsReceived;
-    private Map<String, List<Comment>> topics;
+    private final String ID;
+    private final UserKind userKind;
+    private final Map<String, User> friends;
+    private final Map<Integer, Post> postsMade;
+    private final List<Post> postsReceived;
+    private final Map<String, List<Comment>> topics;
+    private final Map<Post, Boolean> postRead;
     private int commentCount;
     private int postIDCounter;
-    private Map<Post, Boolean> postRead;
     private Integer readPostNumber;
     private Integer numberOfLies;
 
@@ -36,7 +37,7 @@ public class UserClass implements User {
         topics = new HashMap<>();
         commentCount = 0;
         postIDCounter = 1;
-        this.postRead = new HashMap<>();
+        postRead = new HashMap<>();
         readPostNumber = 0;
         numberOfLies = 0;
     }
@@ -90,6 +91,24 @@ public class UserClass implements User {
     public Integer getNumberOfLies() {
         return numberOfLies;
     }
+
+    @Override
+    public Post getPost(int postID) throws PostDoesNotExistException {
+        Post post = postsMade.get(postID);
+        if (post == null)
+            throw new PostDoesNotExistException(this.getID(), postID);
+        return post;
+    }
+
+    @Override
+    public Post getReceivedPost(int postID) {
+        for (Post post :
+                postsReceived) {
+            if (post.getID() == postID)
+                return post;
+        }
+        return null;
+    }
     
     @Override
     public void addFriend(User user) throws UsersAreAlreadyFriendsException {
@@ -116,13 +135,8 @@ public class UserClass implements User {
     }
 
     @Override
-    public Post getPost(int postID) {
-        return postsMade.get(postID);
-    }
-
-    @Override
     public void post(Post post) {
-        postsMade.put(post.getPostID(), post);
+        postsMade.put(post.getID(), post);
         for (User friend:
                 friends.values()) {
             friend.receivePost(post);
@@ -139,17 +153,9 @@ public class UserClass implements User {
     }
 
     @Override
-    public Post getReceivedPost(int postID) {
-        for (Post post :
-                postsReceived) {
-            if (post.getPostID() == postID)
-                return post;
-        }
-        return null;
-    }
-
-    @Override
     public void comment(List<String> hashtags, Comment comment) {
+
+        // Add the comment to all the necessary topics
         for (String hashtag :
                 hashtags) {
             if (!topics.containsKey(hashtag))
@@ -158,9 +164,10 @@ public class UserClass implements User {
         }
         commentCount++;
 
+        // Update if post has not been read before
         if (!postRead.get(comment.getPost())) {
             postRead.put(comment.getPost(), true);
-            incPostsRead();
+            readPostNumber++;
         }
 
         Post post = comment.getPost();
@@ -178,15 +185,5 @@ public class UserClass implements User {
     	if (listComments == null)
     	    throw new NoCommentsException();
     	return listComments.iterator();
-    }
-    
-
-    /* Private Methods */
-
-    /**
-     * This method increments the number of read posts.
-     */
-    private void incPostsRead() {
-        readPostNumber++;
     }
 }

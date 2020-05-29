@@ -1,8 +1,10 @@
 package posts;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * An enumerator containing all kinds of posts.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public enum PostKind {
@@ -15,10 +17,10 @@ public enum PostKind {
 
     /**
 	 * PostKind constructor.
-	 * @param message
+	 * @param string
 	 */
-    PostKind(String message) {
-        this.postType = message;
+    PostKind(String string) {
+        this.postType = string;
     }
 
     /**

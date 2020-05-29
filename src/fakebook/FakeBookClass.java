@@ -10,8 +10,10 @@ import users.*;
 import java.util.*;
 
 /**
- * 
- * @author Luis Tripa ----- && Raquel Melo 57706
+ * The FakeBookClass. Implements all methods related to the FakeBook social network.
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class FakeBookClass implements FakeBook {
@@ -117,14 +119,17 @@ public class FakeBookClass implements FakeBook {
     @Override
     public int post(String userID, List<String> hashtags, PostKind stance, String postContent) throws UserDoesNotExistException, InadequateStanceException {
         User user = users.get(userID);
+
         if (user == null)
             throw new UserDoesNotExistException(userID);
         UserKind userKind = user.getUserKind();
 
         // Check for inadequate stance
-        if (userKind == UserKind.LIAR && stance == PostKind.HONEST)
-            throw new InadequateStanceException();
-        else if (userKind == UserKind.FANATIC &&  !fanaticUserCanPost(user, hashtags, stance))
+        if (userKind == UserKind.FANATIC) {
+            UserFanatic userFanatic = (UserFanatic) user;
+            if (!userFanatic.canPost(hashtags, stance))
+                throw new InadequateStanceException();
+        } else if (userKind == UserKind.LIAR && stance == PostKind.HONEST)
             throw new InadequateStanceException();
 
         // Generate post object
@@ -147,7 +152,7 @@ public class FakeBookClass implements FakeBook {
             shameless.add(user);
         }
         
-        return post.getPostID();
+        return post.getID();
     }
 
     @Override
@@ -158,7 +163,7 @@ public class FakeBookClass implements FakeBook {
     	Post post = user.getPost(postID);
     	if (post == null)
     		throw new PostDoesNotExistException(userID, postID);
-    	return post.getPostContent();
+    	return post.getContent();
     }
     
     @Override
@@ -204,9 +209,8 @@ public class FakeBookClass implements FakeBook {
         if (author == null)
             throw new UserDoesNotExistException(authorID);
 
-        // Check if author has the post
-        if (author.getPost(postID) == null)
-            throw new PostDoesNotExistException(authorID, postID);
+        // Check if author has the post. Will return an PostDoesNotExistsException if it fails.
+        author.getPost(postID);
 
         // Check if user has access to the post (is a friend)
         Post post;
@@ -218,19 +222,19 @@ public class FakeBookClass implements FakeBook {
                 throw new UserHasNoAccessToPostException(userID, postID, authorID);
         }
 
-        // Check if user can post on the post
+        // Check if user can comment on the post
         UserKind userKind = user.getUserKind();
         if (userKind == UserKind.SELFCENTERED && post.getAuthor() != user)
             throw new CannotCommentOnPostException(userID);
         else if (userKind == UserKind.NAIVE && commentStance == CommentStance.NEGATIVE)
             throw new CannotCommentOnPostException(userID);
         else if (userKind == UserKind.LIAR && (post.getKind()==PostKind.HONEST) == (commentStance == CommentStance.POSITIVE))
-            //throw new CannotCommentOnPostException(userID);
             throw new InvalidCommentStanceException();
 
         // Check if user is fanatic and if he can post on the post
         if (userKind == UserKind.FANATIC) {
-            if ( !fanaticUserCanPost(user, post.getHashtags(), post.getKind(), commentStance) )
+            UserFanatic userFanatic = (UserFanatic) user;
+            if ( !userFanatic.canComment(post.getHashtags(), post.getKind(), commentStance) )
                 throw new InvalidCommentStanceException();
         }
 
@@ -239,7 +243,8 @@ public class FakeBookClass implements FakeBook {
         post.comment(comment);
 
         if ((post.getKind() == PostKind.FAKE && comment.getStance() == CommentStance.POSITIVE) || (post.getKind() == PostKind.HONEST && comment.getStance() == CommentStance.NEGATIVE)) {
-        	shameless.add(user);
+        	if (!shameless.contains(user))
+                shameless.add(user);
         }
 
         updatePopularPost(post);
@@ -290,89 +295,36 @@ public class FakeBookClass implements FakeBook {
     	
     	return topPoster;
     }
-    
-    
-    
+
     @Override
-    public User shameless() throws NoShamelessPostsException {
+    public User shameless() throws NoShamelessUsersException {
 
     	if (shameless.size() == 0) {
-    		throw new NoShamelessPostsException();
+    		throw new NoShamelessUsersException();
     	}
 
     	shameless.sort(new ComparatorByLiesPostsID());
 
-        //System.out.println(shameless.get(0).getNumberOfLies());
-        //System.out.println(shameless.get(0).getTotalAccessiblePosts());
-
     	return shameless.get(0);
-
     }
 
     @Override
-    public User responsive() throws NoResponsivePostsException {
+    public User responsive() throws NoResponsiveUsersException {
         if (responsive == null) {
-            throw new NoResponsivePostsException();
+            throw new NoResponsiveUsersException();
         }
 
         return responsive;
     }
 
 
+
     /* Private Methods */
-
-    /**
-     * 
-     * @param user
-     * @param hashtags
-     * @param stance
-     * @return
-     */
-    private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind stance) {
-        UserFanatic userFanatic;
-        userFanatic = (UserFanatic) user;
-
-        for (String fanaticism :
-                hashtags) {
-            if (userFanatic.hasHateFor(fanaticism))
-                return stance != PostKind.HONEST;
-            else if (userFanatic.hasLoveFor(fanaticism))
-                return stance == PostKind.HONEST;
-        }
-        return true;
-    }
-
-    /**
-     * 
-     * @param user
-     * @param hashtags
-     * @param postStance
-     * @param commentStance
-     * @return
-     */
-    private boolean fanaticUserCanPost(User user, List<String> hashtags, PostKind postStance, CommentStance commentStance) {
-        UserFanatic userFanatic;
-        userFanatic = (UserFanatic) user;
-
-        for (String fanaticism :
-                hashtags) {
-            if (userFanatic.hasHateFor(fanaticism))
-                if (postStance == PostKind.HONEST)
-                    return commentStance == CommentStance.NEGATIVE;
-                else
-                    return commentStance == CommentStance.POSITIVE;
-            else if (userFanatic.hasLoveFor(fanaticism))
-                if (postStance == PostKind.HONEST)
-                    return commentStance == CommentStance.POSITIVE;
-                else
-                    return commentStance == CommentStance.NEGATIVE;
-        }
-        return true;
-    }
     
     /**
      * Method that updates the most popular post.
-     * @param post
+     *
+     * @param post The post that was most recently commented on
      */
     private void updatePopularPost(Post post) {
         if (popularPost == null)
@@ -383,7 +335,7 @@ public class FakeBookClass implements FakeBook {
             if (compComments == 0) {
                 int compAuthor = popularPost.getAuthor().getID().compareTo(post.getAuthor().getID());
                 if (compAuthor == 0) {
-                    if (popularPost.getPostID() < post.getPostID())
+                    if (popularPost.getID() < post.getID())
                         popularPost = post;
                 } else if (compAuthor > 0)
                     popularPost = post;
@@ -394,13 +346,14 @@ public class FakeBookClass implements FakeBook {
 
     /**
      * Method that updates the top poster.
-     * @param user
+     *
+     * @param user The user that made the most recent post.
      */
     private void updateTopPoster(User user) {
     	if (topPoster == null)
     		topPoster = user;
     	else {
-    		boolean compPosts = (topPoster.getPostsCount() == (user.getPostsCount()));
+    		boolean compPosts = (topPoster.getPostsCount().equals(user.getPostsCount()));
 
     		if (compPosts) {
     			boolean compComments = (topPoster.getCommentsCount() == (user.getCommentsCount()));
@@ -418,13 +371,14 @@ public class FakeBookClass implements FakeBook {
 
     /**
      * Method that updates the most responsive user.
-     * @param user
+     *
+     * @param user The user that made the most recent comment.
      */
     private void updateResponsive(User user) {
         if (responsive == null)
             responsive = user;
         else {
-            boolean compResponsiveness = responsive.getResponsiveness() == user.getResponsiveness();
+            boolean compResponsiveness = responsive.getResponsiveness().equals(user.getResponsiveness());
 
             if (compResponsiveness) {
                 int compID = responsive.getID().compareTo(user.getID());

@@ -3,19 +3,19 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
-import comments.CommentStance;
-import exceptions.*;
-import fakebook.*;
-import enums.HelpMenu;
-import posts.*;
-import users.*;
-import enums.*;
 
-import comments.Comment;
+import fakebook.*;
+import users.*;
+import posts.*;
+import comments.*;
+import enums.*;
+import exceptions.*;
 
 /**
- * 
- * @author Luís Tripa ----- && Raquel Melo 57706
+ * The main class. This holds all the primary operations
+ *
+ * @author Luis Tripa 57882
+ * @author Raquel Melo 57706
  *
  */
 public class Main {
@@ -26,13 +26,6 @@ public class Main {
 	public static final String COMMENT_ADDED	= "Comment added!";
 	public static final String EXIT_MESSAGE 	= "Bye!";
 
-	// Error output messages
-	public static final String UNKNOWN_COMMAND = "Unknown command. Type help to see available commands.";
-
-	/**
-	 * Main program. Calls the command interpreter.
-	 * @param args - arguments needed to run the program.
-	 */
 	public static void main(String[] args) {
 
 		// Initialize Scanner
@@ -48,13 +41,16 @@ public class Main {
 			processCommand(command, in, fb);
 		}
 
+		// Terminate the Scanner (I'll be back :P)
+		in.close();
+
 	}
 
 	/**
-	 * Commands interpreter.
+	 * Command interpreter.
 	 */
 	private static void processCommand(Commands command, Scanner in, FakeBook fb) {
-		//Method that chooses which command will run, depending on the input//
+		//Method that chooses which command will run, depending on the input
 		switch (command) {
 			case REGISTER:
 				processRegister(in, fb);
@@ -108,7 +104,7 @@ public class Main {
 				System.out.println(EXIT_MESSAGE);
 				break;
 			default:
-				System.out.println(UNKNOWN_COMMAND);
+				System.out.println(Commands.UNKNOWN.getMessage());
 				in.nextLine();
 				break;
 		}
@@ -118,7 +114,7 @@ public class Main {
 	 * Method that tries to execute the Register command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processRegister(Scanner in, FakeBook fb) {
 		try {
@@ -132,12 +128,14 @@ public class Main {
 	}
 
 	/**
-	 * Method that registers a user, by adding a new one to the collection of users. It fails if its identifier already exists or the input is invalid.
-	 * In case the user is a fanatic, the list of fanaticisms given must be valid (doesnt have repeated fanaticisms).
+	 * Method that registers a user, by adding a new one to the collection of users.
+	 * In case the user is a fanatic, the method also reads the user fanaticisms.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserAlreadyExistsException, InvalidUserKindException, InvalidFanaticismListException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserAlreadyExistsException if the user already exists.
+	 * @throws InvalidUserKindException if the given user kind is invalid.
+	 * @throws InvalidFanaticismListException if the user is a fanatic and the list of fanaticisms is invalid (repeated or contradicting elements)
 	 */
 	private static void tryToProcessRegister(Scanner in, FakeBook fb) throws UserAlreadyExistsException, InvalidUserKindException, InvalidFanaticismListException {
 		String userKind = in.next();
@@ -173,7 +171,7 @@ public class Main {
 	/**
 	 * Method that tries to execute the Users command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processUsers(FakeBook fb) {
 		try {
@@ -184,10 +182,10 @@ public class Main {
 	}
 
 	/**
-	 * Method that lists all the users in the fakebook. It fails if there are no users registered.
+	 * Method that lists all the users in the FakeBook.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws NoUsersException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws NoUsersException if there are no users registered in FakeBook. :-(
 	 */
 	private static void tryToProcessUsers(FakeBook fb) throws NoUsersException {
 		Iterator<User> iter = fb.userIterator();
@@ -201,7 +199,7 @@ public class Main {
 	 * Method that tries to execute the AddFriend command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processAddFriend(Scanner in, FakeBook fb) {
 		try {
@@ -212,12 +210,13 @@ public class Main {
 	}
 
 	/**
-	 * Method that sets a friendship between two users. If fails if one of the users doesnt exist; there is already a friendship between those two users or
-	 * the user is trying to set a friendship with himself.
+	 * Method that sets a friendship between two users.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, UsersAreAlreadyFriendsException, UserCannotFriendItselfException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if any of the users do not exist.
+	 * @throws UsersAreAlreadyFriendsException if the users are already friends.
+	 * @throws UserCannotFriendItselfException if an user attempted to friend itself.
 	 */
 	private static void tryToProcessAddFriend(Scanner in, FakeBook fb) throws UserDoesNotExistException, UsersAreAlreadyFriendsException, UserCannotFriendItselfException {
 		String u1_ID = in.nextLine().trim();
@@ -231,7 +230,7 @@ public class Main {
 	 * Method that tries to execute the Friends command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processFriends(Scanner in, FakeBook fb) {
 		try {
@@ -242,11 +241,12 @@ public class Main {
 	}
 
 	/**
-	 * Method that lists all the friends of the given user. It fails if the given user is not registered or if the users hasnt any friends. 
+	 * Method that lists all the friends of the given user.
 	 *  
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, UserHasNoFriendsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if the user does not exist.
+	 * @throws UserHasNoFriendsException if the user does not have any friends
 	 */
 	private static void tryToProcessFriends(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoFriendsException {
 		String userID = in.nextLine().trim();
@@ -267,7 +267,7 @@ public class Main {
 	 * Method that tries to execute the Post command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processPost(Scanner in, FakeBook fb) {
 		try {
@@ -276,24 +276,26 @@ public class Main {
 			System.out.println(e.getMessage());
 		} catch (InvalidHashtagListException e) {
 			System.out.println(e.getMessage());
+			// These two nextLine() methods are necessary to guarantee that if the hashtag get operation fails mid-way it will always compensate the number of lines.
 			in.nextLine();
 			in.nextLine();
 		}
 	}
 
 	/**
-	 * Method that allows the user to post a new message. It fails if the user who is trying to post does not exist; the number of hashtags is not equal
-	 * or greater than 0, or the post stance contradicts the the stance of the user.
+	 * Method that allows the user to post a new message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, InvalidHashtagListException, InadequateStanceException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if the user does not exist.
+	 * @throws InvalidHashtagListException if the hashtag list is invalid (repeated elements).
+	 * @throws InadequateStanceException if the post has an invalid stance according to the user kind.
 	 */
 	private static void tryToProcessPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, InvalidHashtagListException, InadequateStanceException {
 		String userID = in.nextLine().trim();
 		int hashTagCount = in.nextInt();
 
-		// Get hashtags
+		// Get topics/hashtags of post
 		List<String> hashtags = new ArrayList<>(hashTagCount);
 		for (int i=0 ; i<hashTagCount ; i++) {
 			String hash = in.next();
@@ -316,7 +318,7 @@ public class Main {
 	 * Method that tries to execute the UserPosts command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processUserPosts(Scanner in, FakeBook fb) {
 		try {
@@ -327,20 +329,22 @@ public class Main {
 	}
 
 	/**
-	 * Method that lists all the posts of the given user. It fails if the given user is not registered or if the users hasnt made any post yet. 
+	 * Method that lists all the posts of the given user.
 	 *  
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, UserHasNoPostsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if the user does not exist.
+	 * @throws UserHasNoPostsException if the user does not have any posts.
 	 */
 	private static void tryToProcessUserPosts(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoPostsException {
 		String userID = in.nextLine().trim();
 		
 		Iterator<Post> iter = fb.userPostIterator(userID);
 		System.out.println(userID + " posts:");
+
 		while (iter.hasNext()) {
 			Post post = iter.next();
-			System.out.printf("%d. [%s] %s [%d comments]\n", post.getPostID(), post.getKind().getString(), post.getPostContent(), post.getCommentCount());
+			System.out.printf("%d. [%s] %s [%d comments]\n", post.getID(), post.getKind().getString(), post.getContent(), post.getCommentCount());
 		}
 	}
 
@@ -348,7 +352,7 @@ public class Main {
 	 * Method that tries to execute the Comment command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processComment(Scanner in, FakeBook fb) {
 		try {
@@ -359,13 +363,15 @@ public class Main {
 	}
 
 	/**
-	 * Method that allows the user to comment on a post. It fails if the user who is trying to comment does not exist; the user hasnt got access to that post
-	 * (because the two users were not friends by the time the post was made); the post the user is trying to leave a comment on does not exist; the user cannot 
-	 * comment on that post (e.g. because he is self-centered); or if the comment stance is invalid for that user id and that post.
+	 * Method that allows the user to comment on a post.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if one of both post author or comment author don't exist.
+	 * @throws UserHasNoAccessToPostException if the comment author has no access to the post with given ID (because they are not friends or because the post was made before the comment author was a friend of the post author).
+	 * @throws PostDoesNotExistException if the given post does not exist.
+	 * @throws CannotCommentOnPostException if the comment author cannot comment on the post (because of an invalid user stance).
+	 * @throws InvalidCommentStanceException if the stance of the comment is invalid.
 	 */
 	private static void tryToProcessComment(Scanner in, FakeBook fb) throws UserDoesNotExistException, UserHasNoAccessToPostException, PostDoesNotExistException, CannotCommentOnPostException, InvalidCommentStanceException {
 		String userID = in.nextLine().trim();
@@ -385,7 +391,7 @@ public class Main {
 	 * Method that tries to execute the ReadPost command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processReadPost(Scanner in, FakeBook fb) {
 		try {
@@ -396,12 +402,13 @@ public class Main {
 	}
 
 	/**
-	 * Method that shows the detailed information of a certain post, printing it. It fails if the author of the post is not registered; that user has not a post
-	 * with the given id; or if that post hasnt any posts yet.
+	 * Method that shows the detailed information of a certain post, printing it.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, PostDoesNotExistException, NoCommentsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if the given user does not exist.
+	 * @throws PostDoesNotExistException if the given user does not have the post with the given ID.
+	 * @throws NoCommentsException if the post has no comments.
 	 */
 	private static void tryToProcessReadPost(Scanner in, FakeBook fb) throws UserDoesNotExistException, PostDoesNotExistException, NoCommentsException {
 		String userID = in.nextLine().trim();
@@ -422,7 +429,7 @@ public class Main {
 	 * Method that tries to execute the CommentsByUser command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processCommentsByUser(Scanner in, FakeBook fb) {
 		try {
@@ -433,12 +440,12 @@ public class Main {
 	}
 
 	/**
-	 * Method that lists all the comments made by a user on a certain topic/hashtag. It fails if the user is not registered; or if that user has not made any
-	 * comments yet.
+	 * Method that lists all the comments made by a user on a certain topic/hashtag.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws UserDoesNotExistException, NoCommentsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws UserDoesNotExistException if the given user does not exist.
+	 * @throws NoCommentsException if there are no comments on FakeBook.
 	 */
 	private static void tryToProcessCommentsByUser(Scanner in, FakeBook fb) throws UserDoesNotExistException, NoCommentsException  {
 		String userID = in.nextLine().trim();
@@ -447,7 +454,7 @@ public class Main {
 		Iterator<Comment> iter = fb.commentsByUser(userID, topicID);
 		while(iter.hasNext()) {
 			Comment comment = iter.next();
-			System.out.println("[" + comment.getPostAuthor() + " " + comment.getPostStance() + " " + comment.getPostID() + " "
+			System.out.println("[" + comment.getPostAuthor() + " " + comment.getPostStance() + " " + comment.getID() + " "
 								+ comment.getStance().getString() + "] " + comment.getCommentContent());
 		}
 	}
@@ -456,7 +463,7 @@ public class Main {
 	 * Method that tries to execute the TopicFanatics command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processTopicFanatics(Scanner in, FakeBook fb) {
 		try {
@@ -467,11 +474,11 @@ public class Main {
 	}
 
 	/**
-	 * Method that lists all the fanatic users on the given topic. It fails if that kind of fanaticism does not exist.
+	 * Method that lists all the fanatic users on the given topic.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws FanaticismNotFoundException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws FanaticismNotFoundException if the given fanaticism was not found.
 	 */
 	private static void tryToProcessTopicFanatics(Scanner in, FakeBook fb) throws FanaticismNotFoundException {
 		String topic = in.nextLine().trim();
@@ -491,7 +498,7 @@ public class Main {
 	 * Method that tries to execute the TopicPosts command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processTopicPosts(Scanner in, FakeBook fb) {
 		try {
@@ -502,12 +509,12 @@ public class Main {
 	}
 	
 	/**
-	 * Method that lists all the posts on the given topic. It fails if the number of posts to list is invalid (it must be equal or greater than 1); or if the
-	 * given topic does not exist.
+	 * Method that lists all the posts on the given topic.
 	 * 
 	 * @param in is the input from where the information will be read.
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws InvalidNumberOfPostsToListException, TopicNotFoundException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws InvalidNumberOfPostsToListException if the number of posts to list is less than 1.
+	 * @throws TopicNotFoundException if the topic was not found.
 	 */
 	private static void tryToProcessTopicPosts(Scanner in, FakeBook fb) throws InvalidNumberOfPostsToListException, TopicNotFoundException {
 		String topic = in.next();
@@ -521,7 +528,7 @@ public class Main {
 
 		while (iter.hasNext() && postNumber != 0) {
 			Post p = iter.next();
-			System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getPostID(), p.getCommentCount(), p.getPostContent());
+			System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getID(), p.getCommentCount(), p.getContent());
 			postNumber--;
 		}
 	}
@@ -529,7 +536,7 @@ public class Main {
 	/**
 	 * Method that tries to execute the PopularPost command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processPopularPost(FakeBook fb) {
 		try {
@@ -541,20 +548,20 @@ public class Main {
 
 	/**
 	 * Method that shows the most popular post, in other words, the most commented post. It prints its author id, the post id, the number of comments and
-	 * the post content. It fails if there isnt any post on the social network yet.
+	 * the post content.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws NoPostsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws NoPostsException if there isn't any post on FakeBook yet.
 	 */
 	private static void tryToProcessPopularPost(FakeBook fb) throws NoPostsException {
 		Post p = fb.popularPost();
-		System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getPostID(), p.getCommentCount(), p.getPostContent());
+		System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getID(), p.getCommentCount(), p.getContent());
 	}
 
 	/**
 	 * Method that tries to execute the TopPoster command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processTopPoster(FakeBook fb) {
 		try {
@@ -566,10 +573,10 @@ public class Main {
 	
 	/**
 	 * Method that shows the top poster, in other words, the user who made more posts (and in case of a tie, the one who made more comments). It prints his/hers id,
-	 * the number of posts and the number of comments made. It fails if there isnt any post on the social network yet.
+	 * the number of posts and the number of comments made.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws NoTopPosterException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws NoTopPosterException if there isn't any post on FakeBook yet.
 	 */
 	private static void tryToProcessTopPoster(FakeBook fb) throws NoTopPosterException {
 		User u = fb.topPoster();
@@ -579,23 +586,23 @@ public class Main {
 	/**
 	 * Method that tries to execute the Responsive command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processResponsive(FakeBook fb) {
 		try {
 			tryToProcessResponsive(fb);
-		} catch (NoResponsivePostsException e) {
+		} catch (NoResponsiveUsersException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
 	/**
-	 * Method that shows the user with the highest percentage of commented posts. It fails if there isnt any post on the social network yet.
+	 * Method that shows the user with the highest percentage of commented posts.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws NoResponsivePostsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws NoResponsiveUsersException if there isn't any post on FakeBook yet
 	 */
-	private static void tryToProcessResponsive(FakeBook fb) throws NoResponsivePostsException {
+	private static void tryToProcessResponsive(FakeBook fb) throws NoResponsiveUsersException {
 		User u = fb.responsive();
 		System.out.printf("%s %d %d.\n", u.getID(), u.getReadPostNumber(), u.getTotalAccessiblePosts());
 	}
@@ -603,24 +610,24 @@ public class Main {
 	/**
 	 * Method that tries to execute the Shameless command. If it fails it will process the adequate exception and send an output of the respective error message.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
 	 */
 	private static void processShameless(FakeBook fb) {
 		try {
 			tryToProcessShameless(fb);
-		} catch (NoShamelessPostsException e) {
+		} catch (NoShamelessUsersException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 
 	/**
 	 * Method that shows the user who is the top liar, in other words, the one who has posted more lies, either by reinforcing a fake news or by giving 
-	 * a negative comment to an honest post. It fails if there isnt any post on the social network yet.
+	 * a negative comment to an honest post.
 	 * 
-	 * @param fb is the the social network Fakebook, to which we will add the user.
-	 * @throws NoShamelessPostsException.
+	 * @param fb is the the social network FakeBook, to which we will add the user.
+	 * @throws NoShamelessUsersException if there is no post on FakeBook which falls under the characteristics mentioned above.
 	 */
-	private static void tryToProcessShameless(FakeBook fb) throws NoShamelessPostsException {
+	private static void tryToProcessShameless(FakeBook fb) throws NoShamelessUsersException {
 		User u = fb.shameless();
 		System.out.printf("%s %d.\n", u.getID(), u.getNumberOfLies());
 	}
@@ -629,17 +636,19 @@ public class Main {
 	/* Private Methods */
 
 	/**
-	 * Method that prints all the possible commands for this program, with a little description.
+	 * Method that prints all the possible commands for this program and their respective description.
 	 */
 	private static void processHelp() {
-		for (HelpMenu h: HelpMenu.values())
-			System.out.println(h.getMessage());
+		for (Commands c: Commands.values())
+			if (c != Commands.UNKNOWN)
+				System.out.println(c.getMessage());
 	}
 
 	/**
 	 * Method that gets the right command to execute, according to the input.
-	 * @param in
-	 * @return the command to be executed. It fails if the input is invalid.
+	 *
+	 * @param in The Scanner object
+	 * @return An object of type Commands corresponding to the right command to execute.
 	 */
 	private static Commands getCommand(Scanner in) {
 		try {
@@ -650,10 +659,11 @@ public class Main {
 	}
 
 	/**
-	 * 
-	 * @param userKind
-	 * @return
-	 * @throws InvalidUserKindException
+	 * Method that converts string userKind to an object of type UserKind.
+	 *
+	 * @param userKind The string identifying the user kind.
+	 * @return Object of type UserKind
+	 * @throws InvalidUserKindException when the user kind specified was not found
 	 */
 	private static UserKind getUserKind(String userKind) throws InvalidUserKindException {
 		try {
@@ -664,18 +674,20 @@ public class Main {
 	}
 
 	/**
-	 * 
-	 * @param postKind
-	 * @return
+	 * Method that converts string postKind to an object of type PostKind.
+	 *
+	 * @param postKind The string identifying the post kind (honest or fake).
+	 * @return Object of type PostKind
 	 */
 	private static PostKind getPostKind(String postKind) {
 		return PostKind.valueOf(postKind.toUpperCase());
 	}
 
 	/**
-	 * 
-	 * @param commentStance
-	 * @return
+	 * Method that converts string commentStance to an object of type CommentStance.
+	 *
+	 * @param commentStance The string identifying the comment stance.
+	 * @return Object of type CommentStance
 	 */
 	private static CommentStance getCommentStance(String commentStance) {
 		return CommentStance.valueOf(commentStance.toUpperCase());
