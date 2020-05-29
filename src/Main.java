@@ -1,7 +1,4 @@
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 
 import fakebook.*;
@@ -21,10 +18,25 @@ import exceptions.*;
 public class Main {
 
 	// Success output messages
-	public static final String USER_REGISTER	= "%s registered.\n";
-	public static final String FRIEND_ADDED 	= "%s is friend of %s.\n";
-	public static final String COMMENT_ADDED	= "Comment added!";
-	public static final String EXIT_MESSAGE 	= "Bye!";
+	private static final String EXIT_MESSAGE 						= "Bye!";
+	private static final String REGISTER_OUTPUT 					= "%s registered.\n";
+	private static final String USERS_OUTPUT 						= "%s [%s] %d %d %d\n";
+	private static final String ADDFRIEND_OUTPUT 					= "%s is friend of %s.\n";
+	private static final String COMMENT_OUTPUT						= "Comment added!";
+	private static final String POST_OUTPUT 						= "%s sent a %s post to %d friends. Post id = %d.\n";
+	private static final String USERPOSTS_OUTPUT_TITLE 				= "%s posts:\n";
+	private static final String USERPOSTS_OUTPUT_CONTENT 			= "%d. [%s] %s [%d comments]\n";
+	private static final String READPOST_OUTPUT_TITLE 				= "[%s %s] %s\n";
+	private static final String READPOST_OUTPUT_CONTENT 			= "[%s %s] %s\n";
+	private static final String COMMENTS_BY_USER_OUTPUT 			= "[%s %s %d %s] %s\n";
+	private static final String TOPIC_FANATICS_OUTPUT_COMMA 		= "%s, ";
+	private static final String TOPIC_FANATICS_OUTPUT_TERMINATOR 	= "%s.\n";
+	private static final String TOPIC_POSTS_OUTPUT 					= "%s %d %d: %s\n";
+	private static final String POPULAR_POST_OUTPUT 				= "%s %d %d: %s\n";
+	private static final String TOP_POSTER_OUTPUT 					= "%s %d %d.\n";
+	private static final String RESPONSIVE_OUTPUT 					= "%s %d %d.\n";
+	private static final String SHAMELESS_OUTPUT 					= "%s %d.\n";
+
 
 	public static void main(String[] args) {
 
@@ -43,7 +55,6 @@ public class Main {
 
 		// Terminate the Scanner (I'll be back :P)
 		in.close();
-
 	}
 
 	/**
@@ -164,7 +175,7 @@ public class Main {
 			fb.addUser(userID, kind, loves, hates);
 		} else
 			fb.addUser(userID, kind);
-		System.out.printf(USER_REGISTER, userID);
+		System.out.printf(REGISTER_OUTPUT, userID);
 	}
 
 
@@ -191,7 +202,7 @@ public class Main {
 		Iterator<User> iter = fb.userIterator();
 		while (iter.hasNext()) {
 			User u = iter.next();
-			System.out.printf("%s [%s] %d %d %d\n", u.getID(), u.getUserKind().getString(), u.getFriendCount(), u.getPostsCount(), u.getCommentsCount());
+			System.out.printf(USERS_OUTPUT, u.getID(), u.getUserKind().getString(), u.getFriendCount(), u.getPostsCount(), u.getCommentsCount());
 		}
 	}
 
@@ -223,7 +234,7 @@ public class Main {
 		String u2_ID = in.nextLine().trim();
 
 		fb.addFriend(u1_ID, u2_ID);
-		System.out.printf(FRIEND_ADDED, u1_ID, u2_ID);
+		System.out.printf(ADDFRIEND_OUTPUT, u1_ID, u2_ID);
 	}
 
 	/**
@@ -311,7 +322,7 @@ public class Main {
 
 		int postID = fb.post(userID, hashtags, stance, postContent);
 
-		System.out.printf("%s sent a %s post to %d friends. Post id = %d.\n", userID, stance.getString(), fb.getUserFriendCount(userID), postID);
+		System.out.printf(POST_OUTPUT, userID, stance.getString(), fb.getUserFriendCount(userID), postID);
  	}
 
 	/**
@@ -340,11 +351,11 @@ public class Main {
 		String userID = in.nextLine().trim();
 		
 		Iterator<Post> iter = fb.userPostIterator(userID);
-		System.out.println(userID + " posts:");
+		System.out.printf(USERPOSTS_OUTPUT_TITLE, userID);
 
 		while (iter.hasNext()) {
 			Post post = iter.next();
-			System.out.printf("%d. [%s] %s [%d comments]\n", post.getID(), post.getKind().getString(), post.getContent(), post.getCommentCount());
+			System.out.printf(USERPOSTS_OUTPUT_CONTENT, post.getID(), post.getKind().getString(), post.getContent(), post.getCommentCount());
 		}
 	}
 
@@ -384,7 +395,7 @@ public class Main {
 
 		fb.comment(userID, authorID, postID, commentStance, comment);
 
-		System.out.println(COMMENT_ADDED);
+		System.out.println(COMMENT_OUTPUT);
 	}
 
 	/**
@@ -415,13 +426,13 @@ public class Main {
 		int postID = in.nextInt(); in.nextLine();
 		
 		String kind = fb.getPostKind(userID, postID).getString();
-		
-		System.out.println("[" + userID + " " + kind + "] " + fb.getPostContent(userID, postID));
+
+		System.out.printf(READPOST_OUTPUT_TITLE, userID, kind, fb.getPostContent(userID, postID));
 		
 		Iterator<Comment> iter = fb.postCommentsIterator(userID, postID);
 		while (iter.hasNext()) {
 			Comment comment = iter.next();
-			System.out.println("[" + comment.getAuthor().getID() + " " + comment.getStance().getString() + "] " + comment.getCommentContent());
+			System.out.printf(READPOST_OUTPUT_CONTENT, comment.getAuthor().getID(), comment.getStance().getString(), comment.getCommentContent());
 		}
 	}
 
@@ -454,8 +465,7 @@ public class Main {
 		Iterator<Comment> iter = fb.commentsByUser(userID, topicID);
 		while(iter.hasNext()) {
 			Comment comment = iter.next();
-			System.out.println("[" + comment.getPostAuthor() + " " + comment.getPostStance() + " " + comment.getID() + " "
-								+ comment.getStance().getString() + "] " + comment.getCommentContent());
+			System.out.printf(COMMENTS_BY_USER_OUTPUT, comment.getPostAuthor(), comment.getPostStance(), comment.getID(), comment.getStance().getString(), comment.getCommentContent());
 		}
 	}
 
@@ -488,9 +498,9 @@ public class Main {
 		while (iter.hasNext()) {
 			User u = iter.next();
 			if (iter.hasNext())
-				System.out.print(u.getID()+", ");
+				System.out.printf(TOPIC_FANATICS_OUTPUT_COMMA, u.getID());
 			else
-				System.out.println(u.getID()+".");
+				System.out.printf(TOPIC_FANATICS_OUTPUT_TERMINATOR, u.getID());
 		}
 	}
 
@@ -528,7 +538,7 @@ public class Main {
 
 		while (iter.hasNext() && postNumber != 0) {
 			Post p = iter.next();
-			System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getID(), p.getCommentCount(), p.getContent());
+			System.out.printf(TOPIC_POSTS_OUTPUT, p.getAuthor().getID(), p.getID(), p.getCommentCount(), p.getContent());
 			postNumber--;
 		}
 	}
@@ -555,7 +565,7 @@ public class Main {
 	 */
 	private static void tryToProcessPopularPost(FakeBook fb) throws NoPostsException {
 		Post p = fb.popularPost();
-		System.out.printf("%s %d %d: %s\n", p.getAuthor().getID(), p.getID(), p.getCommentCount(), p.getContent());
+		System.out.printf(POPULAR_POST_OUTPUT, p.getAuthor().getID(), p.getID(), p.getCommentCount(), p.getContent());
 	}
 
 	/**
@@ -580,7 +590,7 @@ public class Main {
 	 */
 	private static void tryToProcessTopPoster(FakeBook fb) throws NoTopPosterException {
 		User u = fb.topPoster();
-		System.out.printf("%s %d %d.\n", u.getID(), u.getPostsCount(), u.getCommentsCount());
+		System.out.printf(TOP_POSTER_OUTPUT, u.getID(), u.getPostsCount(), u.getCommentsCount());
 	}
 
 	/**
@@ -604,7 +614,7 @@ public class Main {
 	 */
 	private static void tryToProcessResponsive(FakeBook fb) throws NoResponsiveUsersException {
 		User u = fb.responsive();
-		System.out.printf("%s %d %d.\n", u.getID(), u.getReadPostNumber(), u.getTotalAccessiblePosts());
+		System.out.printf(RESPONSIVE_OUTPUT, u.getID(), u.getReadPostNumber(), u.getTotalAccessiblePosts());
 	}
 
 	/**
@@ -629,7 +639,7 @@ public class Main {
 	 */
 	private static void tryToProcessShameless(FakeBook fb) throws NoShamelessUsersException {
 		User u = fb.shameless();
-		System.out.printf("%s %d.\n", u.getID(), u.getNumberOfLies());
+		System.out.printf(SHAMELESS_OUTPUT, u.getID(), u.getNumberOfLies());
 	}
 
 
