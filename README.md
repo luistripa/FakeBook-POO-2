@@ -9,5 +9,3 @@ This is a console-based social media like program, where users can have contacts
 ## Commands
 
 All commands, including an explanation and examples are in the [Project Specification](./Enunciado.pdf).
-
-## Disclaimer
